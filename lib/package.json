@@ -1,0 +1,17 @@
+{
+  "name": "npm-profile",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Rebecca Turner <me@re-becca.org> (http://re-becca.org/)",
+  "license": "ISC",
+  "dependencies": {
+    "aproba": "^1.1.2",
+    "bluebird": "^3.5.0",
+    "make-fetch-happen": "^2.4.13"
+  }
+}
