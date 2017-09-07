@@ -14,6 +14,7 @@ async function get (argv) {
     if (argv.property) {
       console.log(JSON.stringify(info[argv.property]))
     } else {
+      if (!info.cidr_whitelist) delete info.cidr_whitelist
       console.log(treeify.asTree(info, true))
     }
   } catch (ex) {
