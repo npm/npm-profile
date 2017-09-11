@@ -4,6 +4,8 @@ const Bluebird = require('bluebird')
 const log = require('./util/log.js')('profile:set')
 const npmrc = require('./util/npmrc.js')
 const profile = require('../lib')
+const isCidrV4 = require('is-cidr').isCidrV4
+const isCidrV6 = require('is-cidr').isCidrV6
 
 const blacklist = [ 'email_verified', 'tfa' ]
 
@@ -17,7 +19,15 @@ async function set (argv) {
     const token = npmrc.getAuthToken(conf, argv.registry)
     const info = {}
     if (argv.property === 'cidr_whitelist') {
-      info[argv.property] = argv.value.split(/,\s*/)
+      info.cidr_whitelist = argv.value.split(/,\s*/)
+      info.cidr_whitelist.forEach(cidr => {
+        if (isCidrV6(cidr)) {
+          throw new Error('CIDR whitelist can only contain IPv4 addresses, ' + cidr + ' is IPv6')
+        }
+        if (!isCidrV4(cidr)) {
+          throw new Error('CIDR whitelist contains invalid CIDR entry: ' + cidr)
+        }
+      })
     } else {
       info[argv.property] = argv.value
     }

@@ -93,6 +93,11 @@
       "resolved": "https://registry.npmjs.org/chownr/-/chownr-1.0.1.tgz",
       "integrity": "sha1-4qdQQqlVGQi+vSW4Uj1fl2nXkYE="
     },
+    "cidr-regex": {
+      "version": "1.0.6",
+      "resolved": "https://registry.npmjs.org/cidr-regex/-/cidr-regex-1.0.6.tgz",
+      "integrity": "sha1-dKv9YZ3zcLnVSrFEdVaOl91kwME="
+    },
     "cliui": {
       "version": "3.2.0",
       "resolved": "https://registry.npmjs.org/cliui/-/cliui-3.2.0.tgz",
@@ -459,6 +464,14 @@
       "integrity": "sha1-VAVy0096wxGfj3bDDLwbHgN6/74=",
       "requires": {
         "builtin-modules": "1.1.1"
+      }
+    },
+    "is-cidr": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/is-cidr/-/is-cidr-1.0.0.tgz",
+      "integrity": "sha1-+1qs9lklUxA1naMsrgPkDGocKvw=",
+      "requires": {
+        "cidr-regex": "1.0.6"
       }
     },
     "is-fullwidth-code-point": {
