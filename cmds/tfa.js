@@ -64,7 +64,6 @@ async function enable (argv) {
       challenge = await profile.set(info, argv.registry, {token, otp: argv.otp})
     }
     if (typeof challenge.tfa !== 'string' || !/^otpauth:[/][/]/.test(challenge.tfa)) {
-    console.log(challenge)
       console.error('Unknown error enabling two-factor authentication. Expected otpauth URL, got:', challenge.tfa)
       process.exit(1)
     }
