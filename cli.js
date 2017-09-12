@@ -39,6 +39,11 @@ const argv = yargs
     handler: run('login')
   })
   .command({
+    command: 'get [<property>]',
+    desc: 'get the value of a profile property',
+    handler: run('get')
+  })
+  .command({
     command: 'set <property> <value>',
     desc: 'set the value of a profile property',
     handler: run('set')
@@ -64,11 +69,6 @@ const argv = yargs
         handler: run('tfa', 'disable')
       })
     }
-  })
-  .command({
-    command: 'get [<property>]',
-    desc: 'get the value of a profile property',
-    handler: run('get')
   })
   .demandCommand()
   .help()
