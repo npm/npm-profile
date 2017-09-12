@@ -27,7 +27,7 @@ function readUsername (username, opts) {
     if (error) {
       opts.log && opts.log.warn(error.message)
     } else {
-      return username
+      return username.trim()
     }
   }
       

@@ -10,7 +10,7 @@ async function login (argv) {
   const conf = await npmrc.read(argv.config)
   const opts = { log: log }
   try {
-    const username = (await read.username(argv.username, opts)).trim()
+    const username = await read.username(argv.username, opts)
     const password = await read.password()
     let result
     try {
