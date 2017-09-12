@@ -68,7 +68,33 @@ const argv = yargs
         desc: 'disable 2fa for the current login',
         handler: run('tfa', 'disable')
       })
-    }
+  })
+  .command({
+    command: 'token [create|list|delete]',
+    desc: 'create and remove authentication tokens',
+    builder: yargs => yargs
+      .command({
+        command: 'create [--readonly] [--cidr]',
+        desc: 'create a new authentication token',
+        handler: run('token', 'create'),
+        builder: yargs => yargs
+          .option('readonly', {
+            type: 'boolean'
+          })
+          .option('cidr', {
+            type: 'string'
+          })
+      })
+      .command({
+        command: 'list',
+        desc: 'list all authentication tokens that this account has'
+      })
+      .command({
+        command: 'delete',
+        aliases: [ 'rm' ],
+        desc: 'remove an authentication token',
+        handler: run('token', 'rm')
+      })
   })
   .demandCommand()
   .help()
