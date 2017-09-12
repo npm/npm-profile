@@ -52,18 +52,18 @@ const argv = yargs
     command: '2fa [status|enable|disable]',
     aliases: [ 'tfa' ],
     desc: 'control two factor authentication for this account',
-    builder: yargs => {
-      yargs.command({
+    builder: yargs => yargs
+      .command({
         command: 'status',
         desc: 'get the status of 2fa for the current login',
         handler: run('tfa', 'status')
       })
-      yargs.command({
+      .command({
         command: 'enable <mode>',
         desc: 'enable 2fa for the current login (mode: auth-only, auth-and-writes)',
         handler: run('tfa', 'enable')
       })
-      yargs.command({
+      .command({
         command: 'disable',
         desc: 'disable 2fa for the current login',
         handler: run('tfa', 'disable')
