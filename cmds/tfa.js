@@ -3,18 +3,16 @@ exports.status = status
 exports.enable = enable
 exports.disable = disable
 
-const Bluebird = require('bluebird')
-const read = Bluebird.promisify(require('read'))
+const read = require('./util/read.js')
 const log = require('./util/log.js')('profile:set')
 const npmrc = require('./util/npmrc.js')
 const profile = require('../lib')
-const yargs = require('yargs')
 const url = require('url')
 const queryString = require('query-string')
 const qrcodeTerminal = require('qrcode-terminal')
 
 function qrcode (url) {
-  return new Bluebird(resolve => qrcodeTerminal.generate(url, resolve))
+  return new Promise(resolve => qrcodeTerminal.generate(url, resolve))
 }
 
 async function status (argv) {
@@ -52,7 +50,7 @@ async function enable (argv) {
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
-    const password = await readPassword()
+    const password = await read.password()
     const info = {
       tfa: {
         password,
@@ -74,8 +72,8 @@ async function enable (argv) {
     const opts = queryString.parse(otpauth.query)
     const code = await qrcode(challenge.tfa)    
     console.log('Scan into your authenticator app:\n' + code + '\n Or enter code:', opts.secret)
-    const otp1 = await readOtp('And first OTP code:  ')
-    const otp2 = await readOtp('And second OTP code: ')
+    const otp1 = await read.otp('And first OTP code:  ')
+    const otp2 = await read.otp('And second OTP code: ')
     const result = await profile.set({tfa: [otp1, otp2]}, argv.registry, {token, otp: argv.otp})
     console.log('TFA successfully enabled. Below are your recovery codes, please print these out.')
     console.log('You will need these to recover access to your account if you lose your authentication device.')
@@ -93,7 +91,7 @@ async function disable (argv) {
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
-    const password = await readPassword()
+    const password = await read.password()
     const result = await profile.set({tfa: {password, mode: 'disable'}}, argv.registry, {token, otp: argv.otp})
     console.log(result)
   } catch (ex) {
@@ -105,16 +103,3 @@ async function disable (argv) {
   }
 }
 
-function readPassword (password) {
-  if (password) return password
-      
-  return read({prompt: 'Password: ', silent: true, default: password || ''})
-    .then(readPassword)
-}
-
-function readOtp (msg, otp) {
-  if (otp && /^[\d ]+$/.test(otp)) return otp.replace(/\s+/g, '')
-
-  return read({prompt: msg, default: otp || ''})
-    .then(otp => readOtp(msg, otp))
-}
