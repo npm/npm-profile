@@ -16,7 +16,7 @@ async function login (argv) {
       result = await tryLogin(username, password, argv.registry, argv.otp)
     } catch (ex) {
       if (ex.code === 'otp' && !argv.otp) {
-        const otp = await read.otp()
+        const otp = await read.otp('Authenicator provided OTP:')
         result = await tryLogin(username, password, argv.registry, otp)
       } else {
         throw ex
