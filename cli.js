@@ -56,7 +56,8 @@ const argv = yargs
       })
       .command({
         command: 'list',
-        desc: 'list all authentication tokens that this account has'
+        desc: 'list all authentication tokens that this account has',
+        handler: run('token', 'list')
       })
       .command({
         command: 'delete',
