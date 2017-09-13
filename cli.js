@@ -60,7 +60,7 @@ const argv = yargs
         handler: run('token', 'list')
       })
       .command({
-        command: 'delete',
+        command: 'delete <id>',
         aliases: [ 'rm' ],
         desc: 'remove an authentication token',
         handler: run('token', 'rm')
