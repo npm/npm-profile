@@ -1,6 +1,7 @@
 'use strict'
 const Bluebird = require('bluebird')
 const read = Bluebird.promisify(require('read'))
+const userValidate = require('npm-user-validate')
 
 exports.otp = readOTP
 exports.password = readPassword

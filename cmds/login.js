@@ -1,6 +1,5 @@
 'use strict'
 module.exports = login
-const userValidate = require('npm-user-validate')
 const read = require('./util/read.js')
 const log = require('./util/log.js')('profile:auth')
 const npmrc = require('./util/npmrc.js')
