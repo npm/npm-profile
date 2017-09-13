@@ -1,0 +1,120 @@
+'use strict'
+exports.list = list
+exports.create = create
+exports.rm = rm
+
+const read = require('./util/read.js')
+const npmrc = require('./util/npmrc.js')
+const profile = require('../lib')
+const cliui = require('cliui')
+
+function table () {
+  const headers = [].slice.apply(arguments)
+  headers.forEach(head => {
+    if (head.width) {
+      head.width += 2
+      head.padding = [0, 2, 0, 0]
+    }
+  })
+  const ui = cliui({width: process.stdout.columns})
+  ui.div.apply(ui, headers)
+  const td = function () {
+    const data = [].slice.apply(arguments).map((value, ii) => {
+      return Object.assign({}, headers[ii], {
+        text: headers[ii].width ? value.slice(0, headers[ii].width - 2) : value
+      })
+    })
+    ui.div.apply(ui, data)
+  }
+  td.toString = () => ui.toString()
+  return td
+}
+
+function generateTokenIds (tokens) {
+  const byId = {}
+  tokens.forEach(token => {
+    token.id = token.key
+    for (let ii=0; ii< token.key.length; ++ii) {
+      if (!tokens.some(ot => ot !== token && ot.key.slice(0, ii) === token.key.slice(0, ii))) {
+        token.id = token.key.slice(0, ii)
+        break
+      }
+    }
+    byId[token.id] = token
+  })
+  return byId
+}
+
+async function list (argv) {
+  try {
+    const conf = await npmrc.read(argv.config)
+    const token = npmrc.getAuthToken(conf, argv.registry)
+    const tokens = await profile.listTokens(argv.registry, {token, otp: argv.otp})
+    generateTokenIds(tokens)
+    const idWidth = tokens.reduce((acc, token) => Math.max(acc, token.id.length), 0)
+    const td = table(
+      {text: 'id', width: Math.max(idWidth, 2)},
+      {text: 'token', width: 7},
+      {text: 'created', width: 10},
+      {text: 'updated', width: 10}, 
+      {text: 'readonly', width: 8},
+      {text: 'CIDR whitelist'}
+    )
+    tokens.forEach(token => {
+      td(token.id, token.token + '…', token.created, token.updated, token.readonly ? 'yes' : 'no', token.cidr_whitelist ? token.cidr_whitelist.join(', ') : '')
+    })
+    console.log(td.toString())
+  } catch (ex) {
+   if (ex.code === 401) {
+      throw ex.message
+    } else {
+      throw ex
+    }
+  }
+}
+
+async function create (argv) {
+console.log(argv)
+  try {
+    const conf = await npmrc.read(argv.config)
+    const token = npmrc.getAuthToken(conf, argv.registry)
+    const password = await read.password()
+    const cidr = argv.cidr ? argv.cidr.split(/,\s*/) : []
+    const result = await profile.createToken(password, argv.readonly, cidr, argv.registry, {token, otp: argv.otp})
+    console.log(result)
+  } catch (ex) {
+   if (ex.code === 401) {
+console.log(ex)
+      throw ex.message
+    } else {
+      throw ex
+    }
+  }
+}
+
+async function rm (argv) {
+  try {
+    const conf = await npmrc.read(argv.config)
+    const token = npmrc.getAuthToken(conf, argv.registry)
+    const tokens = await profile.listTokens(argv.registry, {token, otp: argv.otp})
+    const byId = generateTokenIds(tokens)
+    if (!byId[argv.id]) {
+      if (tokens.some(token => token.id.slice(0, argv.id.length) === argv.id)) {
+        console.error('Token ID was ambiguous, a new token may have been created since you last ran `npm-profile token list`.')
+        process.exit(1)
+      } else {
+        console.error('Unknown token ID. Token IDs must come from the output of `npm-profile token list`. They are NOT the token itself.')
+        process.exit(1)
+      }
+    }
+    const key = byId[argv.id].key
+    const result = await profile.removeToken(key, argv.registry, {token, otp: argv.otp})
+    console.log('Token removed.')
+  } catch (ex) {
+   if (ex.code === 401) {
+      throw ex.message
+    } else {
+      throw ex
+    }
+  }
+}
