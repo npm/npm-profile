@@ -7,6 +7,7 @@ const read = require('./util/read.js')
 const npmrc = require('./util/npmrc.js')
 const profile = require('../lib')
 const cliui = require('cliui')
+const validateCIDR = require('./util/validate-cidr.js')
 const treeify = require('treeify')
 
 function table () {
@@ -74,17 +75,24 @@ async function list (argv) {
 }
 
 async function create (argv) {
-console.log(argv)
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
     const password = await read.password()
-    const cidr = argv.cidr ? argv.cidr.split(/,\s*/) : []
-    const result = await profile.createToken(password, argv.readonly, cidr, argv.registry, {token, otp: argv.otp})
-    console.log(result)
+    const cidr = validateCIDR.list(argv.cidr)
+    let result
+    try {
+      result = await profile.createToken(password, argv.readonly, cidr, argv.registry, {token, otp: argv.otp})
+    } catch (ex) {
+      if (ex.code !== 401 || argv.otp) throw ex
+      // if profile.get doesn't throw then their auth token is ok and we probably should prompt for otp
+      if (ex.code !== 'otp') await profile.get(argv.registry, {token, otp: argv.otp})
+      const otp = await read.otp('Authenicator provided OTP:')
+      result = await profile.createToken(password, argv.readonly, cidr, argv.registry, {token, otp})
+    }
+    console.log(treeify.asTree(result, true))
   } catch (ex) {
    if (ex.code === 401) {
-console.log(ex)
       throw ex.message
     } else {
       throw ex
