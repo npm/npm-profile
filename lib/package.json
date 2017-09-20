@@ -11,7 +11,5 @@
   "license": "ISC",
   "dependencies": {
     "aproba": "^1.1.2",
-    "bluebird": "^3.5.0",
     "make-fetch-happen": "^2.4.13"
-  }
 }
