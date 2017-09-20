@@ -4,7 +4,6 @@ exports.enable = enable
 exports.disable = disable
 
 const read = require('./util/read.js')
-const log = require('./util/log.js')('profile:set')
 const npmrc = require('./util/npmrc.js')
 const profile = require('../lib')
 const url = require('url')
@@ -32,7 +31,7 @@ async function status (argv) {
     }
     console.log('two factor authentication:', status)
   } catch (ex) {
-   if (ex.code === 401) {
+    if (ex.code === 401) {
       throw ex.message
     } else {
       throw ex
@@ -69,7 +68,7 @@ async function enable (argv) {
     }
     const otpauth = url.parse(challenge.tfa)
     const opts = queryString.parse(otpauth.query)
-    const code = await qrcode(challenge.tfa)    
+    const code = await qrcode(challenge.tfa)
     console.log('Scan into your authenticator app:\n' + code + '\n Or enter code:', opts.secret)
     const otp1 = await read.otp('And first OTP code:  ')
     const otp2 = await read.otp('And second OTP code: ')
@@ -78,7 +77,7 @@ async function enable (argv) {
     console.log('You will need these to recover access to your account if you lose your authentication device.')
     result.tfa.forEach(c => console.log('\t' + c))
   } catch (ex) {
-   if (ex.code === 401) {
+    if (ex.code === 401) {
       throw ex.message
     } else {
       throw ex
@@ -94,11 +93,10 @@ async function disable (argv) {
     const result = await profile.set({tfa: {password, mode: 'disable'}}, argv.registry, {token, otp: argv.otp})
     console.log(result)
   } catch (ex) {
-   if (ex.code === 401) {
+    if (ex.code === 401) {
       throw ex.message
     } else {
       throw ex
     }
   }
 }
-

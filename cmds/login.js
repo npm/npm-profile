@@ -24,9 +24,9 @@ async function login (argv) {
     }
     npmrc.setAuthToken(conf, argv.registry, result.token)
     await npmrc.write(argv.config, conf)
-    console.log("Logged in as:", username)
+    console.log('Logged in as:', username)
   } catch (ex) {
-    if (ex.code === 400 ||ex.code === 401 || ex.code === 409) {
+    if (ex.code === 400 || ex.code === 401 || ex.code === 409) {
       throw ex.message
     } else {
       throw ex
@@ -41,7 +41,6 @@ async function tryLogin (username, password, registry, otp) {
     if (ex.message === 'canceled') {
       console.error('\n')
       log.error('canceled')
-      return
     } else {
       throw ex
     }

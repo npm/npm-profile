@@ -1,7 +1,5 @@
 'use strict'
 module.exports = set
-const Bluebird = require('bluebird')
-const log = require('./util/log.js')('profile:set')
 const npmrc = require('./util/npmrc.js')
 const profile = require('../lib')
 const validateCIDR = require('./util/validate-cidr.js')
@@ -23,9 +21,9 @@ async function set (argv) {
       info[argv.property] = argv.value
     }
     const result = await profile.set(info, argv.registry, {token, otp: argv.otp})
-    console.log('Set', argv.property, 'to', info[argv.property])
+    console.log('Set', argv.property, 'to', result[argv.property])
   } catch (ex) {
-   if (ex.code === 401) {
+    if (ex.code === 401) {
       throw ex.message
     } else {
       throw ex

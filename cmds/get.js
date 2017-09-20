@@ -1,7 +1,5 @@
 'use strict'
 module.exports = get
-const Bluebird = require('bluebird')
-const log = require('./util/log.js')('profile:get')
 const npmrc = require('./util/npmrc.js')
 const profile = require('../lib')
 const treeify = require('treeify')
@@ -18,7 +16,7 @@ async function get (argv) {
       console.log(treeify.asTree(info, true))
     }
   } catch (ex) {
-   if (ex.code === 401) {
+    if (ex.code === 401) {
       throw ex.message
     } else {
       throw ex

@@ -22,7 +22,7 @@ const argv = yargs
   })
   .option('registry', {
     describe: 'the registry to talk to',
-    type: 'string',
+    type: 'string'
   })
   .option('otp', {
     describe: 'a one time password',
@@ -127,5 +127,4 @@ function run (cmd, subcmd) {
       process.exit(1)
     })
   }
-
 }

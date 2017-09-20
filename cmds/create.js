@@ -15,13 +15,13 @@ async function create (argv) {
     const result = await profile.create(username, email, password, argv.registry)
     npmrc.setAuthToken(conf, argv.registry, result.token)
     await npmrc.write(argv.config, conf)
-    console.log("Account created:", username)
+    console.log('Account created:', username)
   } catch (ex) {
     if (ex.message === 'canceled') {
       console.error('\n')
       log.error('canceled')
       return
-    } if (ex.code === 400 ||ex.code === 401 || ex.code === 409) {
+    } if (ex.code === 400 || ex.code === 401 || ex.code === 409) {
       throw ex.message
     } else {
       throw ex

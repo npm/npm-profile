@@ -36,7 +36,7 @@ function generateTokenIds (tokens, minLength) {
   const byId = {}
   tokens.forEach(token => {
     token.id = token.key
-    for (let ii=minLength; ii< token.key.length; ++ii) {
+    for (let ii = minLength; ii < token.key.length; ++ii) {
       if (!tokens.some(ot => ot !== token && ot.key.slice(0, ii) === token.key.slice(0, ii))) {
         token.id = token.key.slice(0, ii)
         break
@@ -66,7 +66,7 @@ async function list (argv) {
     })
     console.log(td.toString())
   } catch (ex) {
-   if (ex.code === 401) {
+    if (ex.code === 401) {
       throw ex.message
     } else {
       throw ex
@@ -92,7 +92,7 @@ async function create (argv) {
     }
     console.log(treeify.asTree(result, true))
   } catch (ex) {
-   if (ex.code === 401) {
+    if (ex.code === 401) {
       throw ex.message
     } else {
       throw ex
@@ -116,10 +116,10 @@ async function rm (argv) {
       }
     }
     const key = byId[argv.id].key
-    const result = await profile.removeToken(key, argv.registry, {token, otp: argv.otp})
+    await profile.removeToken(key, argv.registry, {token, otp: argv.otp})
     console.log('Token removed.')
   } catch (ex) {
-   if (ex.code === 401) {
+    if (ex.code === 401) {
       throw ex.message
     } else {
       throw ex

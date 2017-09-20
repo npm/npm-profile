@@ -14,8 +14,8 @@ function validate (cidr) {
   }
 }
 
-function validateList (cidr_list) {
-  const list = Array.isArray(cidr_list) ? cidr_list : cidr_list ? cidr_list.split(/,\s*/) : []
+function validateList (cidrs) {
+  const list = Array.isArray(cidrs) ? cidrs : cidrs ? cidrs.split(/,\s*/) : []
   list.forEach(validate)
   return list
 }

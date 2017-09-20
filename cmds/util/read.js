@@ -17,7 +17,7 @@ function readOTP (msg, otp) {
 
 function readPassword (password) {
   if (password) return password
-      
+
   return read({prompt: 'Password: ', silent: true, default: password || ''})
     .then(readPassword)
 }
@@ -31,7 +31,7 @@ function readUsername (username, opts) {
       return username.trim()
     }
   }
-      
+
   return read({prompt: 'Username: ', default: username || ''})
     .then(username => readUsername(username, opts))
 }
@@ -45,7 +45,7 @@ function readEmail (email, opts) {
       return email.trim()
     }
   }
-      
+
   return read({prompt: 'Email (this IS public): ', default: email || ''})
     .then(username => readEmail(username, opts))
 }
