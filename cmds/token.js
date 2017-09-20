@@ -7,6 +7,7 @@ const read = require('./util/read.js')
 const npmrc = require('./util/npmrc.js')
 const profile = require('../lib')
 const cliui = require('cliui')
+const treeify = require('treeify')
 
 function table () {
   const headers = [].slice.apply(arguments)
@@ -30,11 +31,11 @@ function table () {
   return td
 }
 
-function generateTokenIds (tokens) {
+function generateTokenIds (tokens, minLength) {
   const byId = {}
   tokens.forEach(token => {
     token.id = token.key
-    for (let ii=0; ii< token.key.length; ++ii) {
+    for (let ii=minLength; ii< token.key.length; ++ii) {
       if (!tokens.some(ot => ot !== token && ot.key.slice(0, ii) === token.key.slice(0, ii))) {
         token.id = token.key.slice(0, ii)
         break
@@ -50,18 +51,17 @@ async function list (argv) {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
     const tokens = await profile.listTokens(argv.registry, {token, otp: argv.otp})
-    generateTokenIds(tokens)
+    generateTokenIds(tokens, 6)
     const idWidth = tokens.reduce((acc, token) => Math.max(acc, token.id.length), 0)
     const td = table(
       {text: 'id', width: Math.max(idWidth, 2)},
       {text: 'token', width: 7},
       {text: 'created', width: 10},
-      {text: 'updated', width: 10}, 
       {text: 'readonly', width: 8},
       {text: 'CIDR whitelist'}
     )
     tokens.forEach(token => {
-      td(token.id, token.token + '…', token.created, token.updated, token.readonly ? 'yes' : 'no', token.cidr_whitelist ? token.cidr_whitelist.join(', ') : '')
+      td(token.id, token.token + '…', token.created, token.readonly ? 'yes' : 'no', token.cidr_whitelist ? token.cidr_whitelist.join(', ') : '')
     })
     console.log(td.toString())
   } catch (ex) {
@@ -97,7 +97,7 @@ async function rm (argv) {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
     const tokens = await profile.listTokens(argv.registry, {token, otp: argv.otp})
-    const byId = generateTokenIds(tokens)
+    const byId = generateTokenIds(tokens, 6)
     if (!byId[argv.id]) {
       if (tokens.some(token => token.id.slice(0, argv.id.length) === argv.id)) {
         console.error('Token ID was ambiguous, a new token may have been created since you last ran `npm-profile token list`.')
