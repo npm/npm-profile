@@ -1,7 +1,7 @@
 npm-profile-cli
 ---------------
 
-A simple CLI for taking actions against your npmjs.com profile.  Is a
+A minimal CLI for taking actions against your npmjs.com profile.  Is a
 wrapper around the `npm-profile` library.
 
 ```
@@ -14,4 +14,3 @@ npx npm-profile 2fa enable auth-only
 npx npm-profile 2fa enable auth-and-writes
 npx npm-profile 2fa disable
 ```
-
