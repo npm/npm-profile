@@ -1,7 +1,7 @@
 {
   "name": "npm-profile-cli",
   "version": "1.0.0",
-  "description": "npm-profile-cli ---------------",
+  "description": "Edit your npmjs.com profile from the command line",
   "bin": {
     "npm-profile-cli": "cli.js"
   },
@@ -38,5 +38,19 @@
   "bugs": {
     "url": "https://github.com/npm/npm-profile/issues"
   },
-  "homepage": "https://github.com/npm/npm-profile#readme"
+  "homepage": "https://github.com/npm/npm-profile#readme",
+  "files": [
+    "cli.js",
+    "cmds/create.js",
+    "cmds/get.js",
+    "cmds/login.js",
+    "cmds/set.js",
+    "cmds/tfa.js",
+    "cmds/token.js",
+    "cmds/util/log.js",
+    "cmds/util/npmrc.js",
+    "cmds/util/read.js",
+    "cmds/util/validate-cidr.js",
+    "lib/index.js"
+  ]
 }
