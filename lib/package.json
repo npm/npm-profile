@@ -1,22 +1,15 @@
 {
   "name": "npm-profile",
   "version": "1.0.0",
-  "description": "A library for editing your npm profile",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "description": "Library for updating an npmjs.com profile",
   "keywords": [],
   "author": "Rebecca Turner <me@re-becca.org> (http://re-becca.org/)",
   "license": "ISC",
   "dependencies": {
     "aproba": "^1.1.2",
-    "make-fetch-happen": "^2.4.13"
+    "make-fetch-happen": "^2.5.0"
   },
-  "files": [
-    "index.js"
-  ],
-  "devDependencies": {},
+  "main": "index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/npm/npm-profile.git"
@@ -24,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/npm/npm-profile/issues"
   },
-  "homepage": "https://github.com/npm/npm-profile/latest/lib#readme"
+  "homepage": "https://github.com/npm/npm-profile/tree/latest/lib#readme",
+  "files": [
+    "index.js"
+  ]
 }
