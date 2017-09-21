@@ -33,7 +33,7 @@
     "tap": "^10.7.2"
   },
   "scripts": {
-    "test": "standard"
+    "test": "standard && tap lib/test"
   },
   "repository": {
     "type": "git",
