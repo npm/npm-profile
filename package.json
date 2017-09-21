@@ -28,6 +28,7 @@
     "lib": "lib"
   },
   "devDependencies": {
+    "require-inject": "^1.4.2",
     "standard": "^10.0.3"
   },
   "scripts": {
