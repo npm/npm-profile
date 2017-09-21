@@ -84,7 +84,7 @@ If the object has a `code` property set to `ip` then that indicates that
 this account is only allowed to login from certain networks and this ip is
 not on one of those networks.
 
-If the error was nenither of these thenthe error object will have a
+If the error was neither of these then the error object will have a
 `code` property set to the HTTP response code and a `headers` property with
 the HTTP headers in the response.
 
@@ -278,7 +278,7 @@ Create a new authentication token, possibly with restrictions.
 #### **Promise Value**
 
 The promise will resolve with an object very much like the one's returned by
-`profile.listTokens`.  THe only difference is that `token` is not truncated.
+`profile.listTokens`.  The only difference is that `token` is not truncated.
 
 ```
 {
