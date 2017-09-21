@@ -29,7 +29,8 @@
   },
   "devDependencies": {
     "require-inject": "^1.4.2",
-    "standard": "^10.0.3"
+    "standard": "^10.0.3",
+    "tap": "^10.7.2"
   },
   "scripts": {
     "test": "standard"
