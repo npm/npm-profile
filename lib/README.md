@@ -59,7 +59,7 @@ profile.login(username, email, password, registry, {}).catch(err => {
 
 Logs you into an existing user.  Does not create the user if they do not
 already exist.  Logging in means generating a new bearer token for use in
-future authentication. This is what yous as an `authToken` in an `.npmrc`.
+future authentication. This is what you use as an `authToken` in an `.npmrc`.
  
 * `username` String
 * `email` String
