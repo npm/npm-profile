@@ -164,9 +164,10 @@ currently exposed in `npm` itself.
 Enabling two-factor authentication is a multi-step process.
 
 1. `profile.set({tfa: {password, mode}}, registry, {token})`
-   * Note that the user's password is required here IN ADDITION to the token.
-   * Where `mode` is either `auth-only` which requires `otp` when calling `login` or `createToken`.
-   * Or `mode` is `auth-and-writes` and an `otp` will be required when publishing.
+   * Note that the user's `password` is required here in the `tfa` object, regardless of auth.
+   * `mode` is either `auth-only` which requires `otp` when calling `login`
+     or `createToken`, or `mode` is `auth-and-writes` and an `otp` will be
+     required when publishing.
 2. If the result from calling `profile.set` has an empty `tfa` property
    then that means that enabling `tfa` was already started elsewhere or is
    already setup.  In either case you'll need to set it to `disable` before
