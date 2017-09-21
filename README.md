@@ -5,7 +5,7 @@ A minimal CLI for taking actions against your npmjs.com profile.  Is a
 wrapper around the `npm-profile` library.
 
 ```
-npx npm-profile create [username] [email]
+npx npm-profile adduser [username] [email]
 npx npm-profile login [username]
 npx npm-profile get [property]
 npx npm-profile set property value

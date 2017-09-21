@@ -29,9 +29,9 @@ const argv = yargs
     type: 'string'
   })
   .command({
-    command: 'create [<username>] [<email>]',
-    desc: 'create a new account',
-    handler: run('create')
+    command: 'adduser [<username>] [<email>]',
+    desc: 'adduser a new account',
+    handler: run('adduser')
   })
   .command({
     command: 'login [<username>]',
