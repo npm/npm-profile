@@ -45,7 +45,7 @@
   "homepage": "https://github.com/npm/npm-profile#readme",
   "files": [
     "cli.js",
-    "cmds/create.js",
+    "cmds/adduser.js",
     "cmds/get.js",
     "cmds/login.js",
     "cmds/set.js",
