@@ -58,9 +58,8 @@ async function enable (argv) {
     }
     let challenge = await profile.set(info, argv.registry, {token, otp: argv.otp})
     if (challenge.tfa === null) {
-      let result = await profile.set({tfa: {password, mode: 'disable'}}, argv.registry, {token, otp: argv.otp})
-      console.log(result)
-      challenge = await profile.set(info, argv.registry, {token, otp: argv.otp})
+      console.log('Two factor auth mode changed to: ' + argv.mode)
+      return
     }
     if (typeof challenge.tfa !== 'string' || !/^otpauth:[/][/]/.test(challenge.tfa)) {
       console.error('Unknown error enabling two-factor authentication. Expected otpauth URL, got:', challenge.tfa)
