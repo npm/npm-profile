@@ -44,6 +44,7 @@
   },
   "homepage": "https://github.com/npm/npm-profile#readme",
   "files": [
+    "npm-shrinkwrap.json",
     "cli.js",
     "cmds/adduser.js",
     "cmds/get.js",
