@@ -11,7 +11,7 @@ profile.get(registry, {token}).then(result => {
 
 ## Functions
 
-### profile.adduser(username, email, password, registry) → Promise
+### profile.adduser(username, email, password, registry, opts) → Promise
 
 ```js
 profile.adduser(username, email, password, registry).then(result => {
@@ -30,6 +30,8 @@ this is registry specific and not guaranteed.
 * `email` String
 * `password` String
 * `registry` String (for reference, the npm registry is `https://registry.npmjs.org`)
+* `opts` Object, [make-fetch-happen options](https://www.npmjs.com/package/make-fetch-happen#extra-options) for setting
+  things like cache, proxy, SSL CA and retry rules.
 
 #### **Promise Value**
 
@@ -43,7 +45,7 @@ in the response.
 
 
 
-### profile.login(username, password, registry, auth) → Promise
+### profile.login(username, password, registry, auth, opts) → Promise
 
 ```js
 profile.login(username, email, password, registry, {}).catch(err => {
@@ -67,6 +69,8 @@ future authentication. This is what you use as an `authToken` in an `.npmrc`.
 * `registry` String (for reference, the npm registry is `https://registry.npmjs.org`)
 * `auth` Object, properties: `otp` — the one-time password from a two-factor
   authentication device.
+* `opts` Object, [make-fetch-happen options](https://www.npmjs.com/package/make-fetch-happen#extra-options) for setting
+  things like cache, proxy, SSL CA and retry rules.
 
 #### **Promise Value**
 
@@ -88,7 +92,7 @@ If the error was neither of these then the error object will have a
 `code` property set to the HTTP response code and a `headers` property with
 the HTTP headers in the response.
 
-### profile.get(registry, auth) → Promise
+### profile.get(registry, auth, opts) → Promise
 
 ```js
 profile.get(registry, {token}).then(userProfile => {
@@ -103,6 +107,8 @@ Fetch profile information for the authenticated user.
   `adduser`, `login` or `createToken`, or, `username`, `password` (and
   optionally `otp`).  Authenticating for this command via a username and
   password will likely not be supported in the future.
+* `opts` Object, [make-fetch-happen options](https://www.npmjs.com/package/make-fetch-happen#extra-options) for setting
+  things like cache, proxy, SSL CA and retry rules.
 
 #### **Promise Value**
 
@@ -137,7 +143,7 @@ set to the HTTP response code and a `headers` property with the HTTP headers
 in the response.
 
 
-### profile.set(profileData, registry, auth) → Promise
+### profile.set(profileData, registry, auth, opts) → Promise
 
 ```js
 profile.set({github: 'great-github-account-name'}, registry, {token})
@@ -152,6 +158,8 @@ Update profile information for the authenticated user.
   `adduser`, `login` or `createToken`, or, `username`, `password` (and
   optionally `otp`).  Authenticating for this command via a username and
   password will likely not be supported in the future.
+* `opts` Object, [make-fetch-happen options](https://www.npmjs.com/package/make-fetch-happen#extra-options) for setting
+  things like cache, proxy, SSL CA and retry rules.
 
 #### **SETTING `cidr-whitelist`**
 
@@ -196,7 +204,7 @@ An error object indicating what went wrong.  It will have a `code` property
 set to the HTTP response code and a `headers` property with the HTTP headers
 in the response.
 
-### profile.listTokens(registry, auth) → Promise
+### profile.listTokens(registry, auth, opts) → Promise
 
 ```js
 profile.listTokens(registry, {token}).then(tokens => {
@@ -211,6 +219,8 @@ Fetch a list of all of the authentication tokens the authenticated user has.
   `adduser`, `login` or `createToken`, or, `username`, `password` (and
   optionally `otp`).  Authenticating for this command via a username and
   password will likely not be supported in the future.
+* `opts` Object, [make-fetch-happen options](https://www.npmjs.com/package/make-fetch-happen#extra-options) for setting
+  things like cache, proxy, SSL CA and retry rules.
 
 #### **Promise Value**
 
@@ -229,7 +239,7 @@ An error object indicating what went wrong.  It will have a `code` property
 set to the HTTP response code and a `headers` property with the HTTP headers
 in the response.
 
-### profile.removeToken(token|key, registry, auth) → Promise
+### profile.removeToken(token|key, registry, auth, opts) → Promise
 
 ```js
 profile.removeToken(key, registry, {token}).then(() => {
@@ -245,6 +255,8 @@ Remove a specific authentication token.
   `adduser`, `login` or `createToken`, or, `username`, `password` (and
   optionally `otp`).  Authenticating for this command via a username and
   password will likely not be supported in the future.
+* `opts` Object, [make-fetch-happen options](https://www.npmjs.com/package/make-fetch-happen#extra-options) for setting
+  things like cache, proxy, SSL CA and retry rules.
 
 #### **Promise Value**
 
@@ -256,7 +268,7 @@ An error object indicating what went wrong.  It will have a `code` property
 set to the HTTP response code and a `headers` property with the HTTP headers
 in the response.
 
-### profile.createToken(password, readonly, cidr_whitelist, registry, auth) → Promise
+### profile.createToken(password, readonly, cidr_whitelist, registry, auth, opts) → Promise
 
 ```js
 profile.createToken(password, readonly, cidr_whitelist, registry, {token, otp}).then(newToken => {
@@ -274,6 +286,8 @@ Create a new authentication token, possibly with restrictions.
   `adduser`, `login` or `createToken`, or, `username`, `password` (and
   optionally `otp`).  Authenticating for this command via a username and
   password will likely not be supported in the future.
+* `opts` Object, [make-fetch-happen options](https://www.npmjs.com/package/make-fetch-happen#extra-options) for setting
+  things like cache, proxy, SSL CA and retry rules.
 
 #### **Promise Value**
 
