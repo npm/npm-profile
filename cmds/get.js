@@ -8,7 +8,7 @@ async function get (argv) {
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
-    const info = await profile.get(argv.registry, {token, otp: argv.otp})
+    const info = await profile.get({registry: argv.registry, auth: {token, otp: argv.otp}})
     if (argv.property) {
       console.log(JSON.stringify(info[argv.property]))
     } else {

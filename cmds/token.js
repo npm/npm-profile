@@ -51,7 +51,7 @@ async function list (argv) {
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
-    const tokens = await profile.listTokens(argv.registry, {token, otp: argv.otp})
+    const tokens = await profile.listTokens({registry: argv.registry, auth: {token, otp: argv.otp}})
     generateTokenIds(tokens, 6)
     const idWidth = tokens.reduce((acc, token) => Math.max(acc, token.id.length), 0)
     const td = table(
@@ -82,13 +82,13 @@ async function create (argv) {
     const cidr = validateCIDR.list(argv.cidr)
     let result
     try {
-      result = await profile.createToken(password, argv.readonly, cidr, argv.registry, {token, otp: argv.otp})
+      result = await profile.createToken(password, argv.readonly, cidr, {registry: argv.registry, auth: {token, otp: argv.otp}})
     } catch (ex) {
       if (ex.code !== 401 || argv.otp) throw ex
       // if profile.get doesn't throw then their auth token is ok and we probably should prompt for otp
-      if (ex.code !== 'otp') await profile.get(argv.registry, {token, otp: argv.otp})
+      if (ex.code !== 'otp') await profile.get({registry: argv.registry, auth: {token, otp: argv.otp}})
       const otp = await read.otp('Authenicator provided OTP:')
-      result = await profile.createToken(password, argv.readonly, cidr, argv.registry, {token, otp})
+      result = await profile.createToken(password, argv.readonly, cidr, {registry: argv.registry, auth: {token, otp}})
     }
     console.log(treeify.asTree(result, true))
   } catch (ex) {
@@ -104,7 +104,7 @@ async function rm (argv) {
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
-    const tokens = await profile.listTokens(argv.registry, {token, otp: argv.otp})
+    const tokens = await profile.listTokens({registry: argv.registry, auth: {token, otp: argv.otp}})
     const byId = generateTokenIds(tokens, 6)
     if (!byId[argv.id]) {
       if (tokens.some(token => token.id.slice(0, argv.id.length) === argv.id)) {
@@ -116,7 +116,7 @@ async function rm (argv) {
       }
     }
     const key = byId[argv.id].key
-    await profile.removeToken(key, argv.registry, {token, otp: argv.otp})
+    await profile.removeToken(key, {registry: argv.registry, auth: {token, otp: argv.otp}})
     console.log('Token removed.')
   } catch (ex) {
     if (ex.code === 401) {

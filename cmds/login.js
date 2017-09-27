@@ -36,7 +36,7 @@ async function login (argv) {
 
 async function tryLogin (username, password, registry, otp) {
   try {
-    return await profile.login(username, password, registry, {otp})
+    return await profile.login(username, password, {registry, auth: {otp}})
   } catch (ex) {
     if (ex.message === 'canceled') {
       console.error('\n')

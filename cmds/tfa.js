@@ -18,7 +18,7 @@ async function status (argv) {
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
-    const info = await profile.get(argv.registry, {token, otp: argv.otp})
+    const info = await profile.get({registry: argv.registry, auth: {token, otp: argv.otp}})
     let status
     if (info.tfa) {
       if (info.tfa.pending) {
@@ -56,7 +56,7 @@ async function enable (argv) {
         mode: argv.mode
       }
     }
-    let challenge = await profile.set(info, argv.registry, {token, otp: argv.otp})
+    let challenge = await profile.set(info, {registry: argv.registry, auth: {token, otp: argv.otp}})
     if (challenge.tfa === null) {
       console.log('Two factor auth mode changed to: ' + argv.mode)
       return
@@ -71,7 +71,7 @@ async function enable (argv) {
     console.log('Scan into your authenticator app:\n' + code + '\n Or enter code:', opts.secret)
     const otp1 = await read.otp('And first OTP code:  ')
     const otp2 = await read.otp('And second OTP code: ')
-    const result = await profile.set({tfa: [otp1, otp2]}, argv.registry, {token, otp: argv.otp})
+    const result = await profile.set({tfa: [otp1, otp2]}, {registry: argv.registry, auth: {token, otp: argv.otp}})
     console.log('TFA successfully enabled. Below are your recovery codes, please print these out.')
     console.log('You will need these to recover access to your account if you lose your authentication device.')
     result.tfa.forEach(c => console.log('\t' + c))
@@ -89,7 +89,7 @@ async function disable (argv) {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
     const password = await read.password()
-    const result = await profile.set({tfa: {password, mode: 'disable'}}, argv.registry, {token, otp: argv.otp})
+    const result = await profile.set({tfa: {password, mode: 'disable'}}, {registry: argv.registry, auth: {token, otp: argv.otp}})
     console.log(result)
   } catch (ex) {
     if (ex.code === 401) {

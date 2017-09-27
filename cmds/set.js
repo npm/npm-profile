@@ -20,7 +20,7 @@ async function set (argv) {
     } else {
       info[argv.property] = argv.value
     }
-    const result = await profile.set(info, argv.registry, {token, otp: argv.otp})
+    const result = await profile.set(info, {registry: argv.registry, auth: {token, otp: argv.otp}})
     console.log('Set', argv.property, 'to', result[argv.property])
   } catch (ex) {
     if (ex.code === 401) {

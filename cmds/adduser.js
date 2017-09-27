@@ -12,7 +12,7 @@ async function adduser (argv) {
     const username = await read.username(argv.username, opts)
     const email = await read.email(argv.email, opts)
     const password = await read.password()
-    const result = await profile.adduser(username, email, password, argv.registry)
+    const result = await profile.adduser(username, email, password, {registry: argv.registry})
     npmrc.setAuthToken(conf, argv.registry, result.token)
     await npmrc.write(argv.config, conf)
     console.log('Account created:', username)
