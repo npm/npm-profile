@@ -15,11 +15,12 @@ function readOTP (msg, otp) {
     .then(otp => readOTP(msg, otp))
 }
 
-function readPassword (password) {
+function readPassword (prompt, password) {
+  if (!prompt) prompt = 'Password: '
   if (password) return password
 
-  return read({prompt: 'Password: ', silent: true, default: password || ''})
-    .then(readPassword)
+  return read({prompt, silent: true, default: password || ''})
+    .then(password => readPassword(prompt, password))
 }
 
 function readUsername (username, opts) {
