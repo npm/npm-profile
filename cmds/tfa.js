@@ -9,6 +9,7 @@ const profile = require('../lib')
 const url = require('url')
 const queryString = require('query-string')
 const qrcodeTerminal = require('qrcode-terminal')
+const retryWithOTP = require('./util/retry-with-otp')
 
 function qrcode (url) {
   return new Promise(resolve => qrcodeTerminal.generate(url, resolve))
@@ -56,7 +57,11 @@ async function enable (argv) {
         mode: argv.mode
       }
     }
-    let challenge = await profile.set(info, {registry: argv.registry, auth: {token, otp: argv.otp}})
+    const challenge = await retryWithOTP({
+      otp: argv.otp,
+      get: () => read.otp('Authenticator provided OTP:'),
+      fn: otp => profile.set(info, {registry: argv.registry, auth: {token, otp}})
+    })
     if (challenge.tfa === null) {
       console.log('Two factor auth mode changed to: ' + argv.mode)
       return
@@ -89,7 +94,11 @@ async function disable (argv) {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
     const password = await read.password()
-    const result = await profile.set({tfa: {password, mode: 'disable'}}, {registry: argv.registry, auth: {token, otp: argv.otp}})
+    const result = await retryWithOTP({
+      otp: argv.otp,
+      get: () => read.otp('Authenticator provided OTP:'),
+      fn: otp => profile.set({tfa: {password, mode: 'disable'}}, {registry: argv.registry, auth: {token, otp}})
+    })
     console.log(result)
   } catch (ex) {
     if (ex.code === 401) {

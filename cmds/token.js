@@ -9,6 +9,7 @@ const profile = require('../lib')
 const cliui = require('cliui')
 const validateCIDR = require('./util/validate-cidr.js')
 const treeify = require('treeify')
+const retryWithOTP = require('./util/retry-with-otp')
 
 function table () {
   const headers = [].slice.apply(arguments)
@@ -80,16 +81,11 @@ async function create (argv) {
     const token = npmrc.getAuthToken(conf, argv.registry)
     const password = await read.password()
     const cidr = validateCIDR.list(argv.cidr)
-    let result
-    try {
-      result = await profile.createToken(password, argv.readonly, cidr, {registry: argv.registry, auth: {token, otp: argv.otp}})
-    } catch (ex) {
-      if (ex.code !== 401 || argv.otp) throw ex
-      // if profile.get doesn't throw then their auth token is ok and we probably should prompt for otp
-      if (ex.code !== 'otp') await profile.get({registry: argv.registry, auth: {token, otp: argv.otp}})
-      const otp = await read.otp('Authenicator provided OTP:')
-      result = await profile.createToken(password, argv.readonly, cidr, {registry: argv.registry, auth: {token, otp}})
-    }
+    const result = await retryWithOTP({
+      otp: argv.otp,
+      get: () => read.otp('Authenticator provided OTP:'),
+      fn: otp => profile.createToken(password, argv.readonly, cidr, {registry: argv.registry, auth: {token, otp}})
+    })
     console.log(treeify.asTree(result, true))
   } catch (ex) {
     if (ex.code === 401) {
@@ -116,7 +112,11 @@ async function rm (argv) {
       }
     }
     const key = byId[argv.id].key
-    await profile.removeToken(key, {registry: argv.registry, auth: {token, otp: argv.otp}})
+    await retryWithOTP({
+      otp: argv.otp,
+      get: () => read.otp('Authenticator provided OTP:'),
+      fn: otp => profile.removeToken(key, {registry: argv.registry, auth: {token, otp}})
+    })
     console.log('Token removed.')
   } catch (ex) {
     if (ex.code === 401) {
