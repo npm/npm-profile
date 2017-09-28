@@ -57,6 +57,14 @@ async function enable (argv) {
         mode: argv.mode
       }
     }
+    const current = await profile.get({registry: argv.registry, auth: {token, otp: argv.otp}})
+    if (current.tfa && current.tfa.pending) {
+      await retryWithOTP({
+        otp: argv.otp,
+        get: () => read.otp('Authenticator provided OTP:'),
+        fn: otp => profile.set({tfa: {password, mode: 'disable'}}, {registry: argv.registry, auth: {token, otp}})
+      })
+    }
     const challenge = await retryWithOTP({
       otp: argv.otp,
       get: () => read.otp('Authenticator provided OTP:'),
@@ -94,12 +102,9 @@ async function disable (argv) {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
     const password = await read.password()
-    const result = await retryWithOTP({
-      otp: argv.otp,
-      get: () => read.otp('Authenticator provided OTP:'),
-      fn: otp => profile.set({tfa: {password, mode: 'disable'}}, {registry: argv.registry, auth: {token, otp}})
-    })
-    console.log(result)
+    const otp = argv.otp || await read.otp('Authenticator provided OTP:')
+    await profile.set({tfa: {password, mode: 'disable'}}, {registry: argv.registry, auth: {token, otp}})
+    console.log('two factor auth disabled')
   } catch (ex) {
     if (ex.code === 'E401') {
       throw ex.message
