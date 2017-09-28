@@ -14,7 +14,7 @@ profile.get(registry, {token}).then(result => {
 ### profile.adduser(username, email, password, config) → Promise
 
 ```js
-profile.adduser(username, email, password, registry).then(result => {
+profile.adduser(username, email, password, {registry}).then(result => {
   // do something with result.token
 })
 ```
@@ -40,19 +40,25 @@ An object with a `token` property that can be passed into future authentication 
 
 #### **Promise Rejection**
 
-An error object indicating what went wrong.  It will have a `code` property
-set to the HTTP response code and a `headers` property with the HTTP headers
-in the response.
+An error object indicating what went wrong.
 
+The `headers` property will contain the HTTP headers of the response.
 
+If the action was denied because an OTP is required then `code` will be set
+to `otp`.
+
+If the action was denied because it came from an IP address that this action
+on this account isn't allowed from then the `code` will be set to `ipaddress`.
+
+Otherwise the code will be the HTTP response code.
 
 ### profile.login(username, password, config) → Promise
 
 ```js
-profile.login(username, email, password, registry, {}).catch(err => {
+profile.login(username, password, {registry}).catch(err => {
   if (err.code === 'otp') {
     return getOTPFromSomewhere().then(otp => {
-      return profile.login(username, email, password, registry, {otp})
+      return profile.login(username, password, {registry, auth: {otp}})
     })
   }
 }).then(result => {
@@ -97,7 +103,7 @@ the HTTP headers in the response.
 ### profile.get(config) → Promise
 
 ```js
-profile.get(registry, {token}).then(userProfile => {
+profile.get(registry, {auth: {token}}).then(userProfile => {
   // do something with userProfile
 })
 ```
@@ -141,21 +147,28 @@ An object that looks like this:
 
 #### **Promise Rejection**
 
-An error object indicating what went wrong.  It will have a `code` property
-set to the HTTP response code and a `headers` property with the HTTP headers
-in the response.
+An error object indicating what went wrong.
 
+The `headers` property will contain the HTTP headers of the response.
+
+If the action was denied because an OTP is required then `code` will be set
+to `otp`.
+
+If the action was denied because it came from an IP address that this action
+on this account isn't allowed from then the `code` will be set to `ipaddress`.
+
+Otherwise the code will be the HTTP response code.
 
 ### profile.set(profileData, config) → Promise
 
 ```js
-profile.set({github: 'great-github-account-name'}, registry, {token})
+profile.set({github: 'great-github-account-name'}, {registry, auth: {token}})
 ```
 
 Update profile information for the authenticated user.
 
 * `profileData` An object, like that returned from `profile.get`, but see
-  below for caveats relating to `tfa` and `cidr_whitelist`.
+  below for caveats relating to `password`, `tfa` and `cidr_whitelist`.
 * `config` Object
   * `registry` String (for reference, the npm registry is `https://registry.npmjs.org`)
   * `auth` Object, properties: `token` — a bearer token returned from
@@ -165,26 +178,46 @@ Update profile information for the authenticated user.
   * `opts` Object, [make-fetch-happen options](https://www.npmjs.com/package/make-fetch-happen#extra-options) for setting
     things like cache, proxy, SSL CA and retry rules.
 
-#### **SETTING `cidr-whitelist`**
+#### **SETTING `password`**
 
-Only valid CIDR ranges are allowed in this array.  Be very careful as it's
-possible to lock yourself out of your account with this.  This is not
-currently exposed in `npm` itself.
+This is used to change your password and is not visible (for obvious
+reasons) through the `get()` API.  The value should be an object with `old`
+and `new` properties, where the former has the user's current password and
+the latter has the desired new password. For example
+
+```js
+profile.set({password: {old: 'abc123', new: 'my new (more secure) password'}}, {registry, auth: {token}})
+```
+
+#### **SETTING `cidr_whitelist`**
+
+The value for this is an Array.  Only valid CIDR ranges are allowed in it.
+Be very careful as it's possible to lock yourself out of your account with
+this.  This is not currently exposed in `npm` itself.
+
+```js
+profile.set({cidr_whitelist: [ '8.8.8.8/32' ], {registry, auth: {token}})
+// ↑ only one of google's dns servers can now access this account.
+```
 
 #### **SETTING `tfa`**
 
 Enabling two-factor authentication is a multi-step process.
 
-1. `profile.set({tfa: {password, mode}}, registry, {token})`
+1. Call `profile.get` and check the status of `tfa`. If `pending` is true then
+   you'll need to disable it with `profile.set({tfa: {password, mode: 'disable'}, …)`.
+2. `profile.set({tfa: {password, mode}}, {registry, auth: {token}})`
    * Note that the user's `password` is required here in the `tfa` object, regardless of auth.
    * `mode` is either `auth-only` which requires `otp` when calling `login`
      or `createToken`, or `mode` is `auth-and-writes` and an `otp` will be
      required when publishing.
-2. If the result from calling `profile.set` has an empty `tfa` property
-   then that means that enabling `tfa` was already started elsewhere or is
-   already setup.  In either case you'll need to set it to `disable` before
-   setting it to one of the modes above.
-3. If the result has a `tfa` property it will be an `otpauth` URL, as
+   * Be aware that this set call may require otp as part of the auth object.
+     If otp is needed it will be indicated through a rejection in the usual
+     way.
+3. If tfa was already enabled then you're just switch modes and a
+   successful response means that you're done. If the tfa property is empty and
+   tfa _wasn't_ enabled then it means they were in a pending state.
+3. The response will have a `tfa` property set to an `otpauth` URL, as
    [used by Google Authenticator](https://github.com/google/google-authenticator/wiki/Key-Uri-Format).
    You will need to show this to the user for them to add to their
    authenticator application.  This is typically done as a QRCODE, but you can
@@ -198,15 +231,30 @@ Enabling two-factor authentication is a multi-step process.
    later if the second factor is lost and generally should be printed and
    put somewhere safe.
 
+Disabling two-factor authentication is more straightforward, set the `tfa`
+attribute to an object with a `password` property and a `mode` of `disable`.
+
+```js
+profile.set({tfa: {password, mode: 'disable'}, {registry, auth: {token}}}
+```
+
 #### **Promise Value**
 
 An object reflecting the changes you made, see description for `profile.get`.
 
 #### **Promise Rejection**
 
-An error object indicating what went wrong.  It will have a `code` property
-set to the HTTP response code and a `headers` property with the HTTP headers
-in the response.
+An error object indicating what went wrong.
+
+The `headers` property will contain the HTTP headers of the response.
+
+If the action was denied because an OTP is required then `code` will be set
+to `otp`.
+
+If the action was denied because it came from an IP address that this action
+on this account isn't allowed from then the `code` will be set to `ipaddress`.
+
+Otherwise the code will be the HTTP response code.
 
 ### profile.listTokens(config) → Promise
 
@@ -240,9 +288,17 @@ An array of token objects. Each token object has the following properties:
 
 #### **Promise Rejection**
 
-An error object indicating what went wrong.  It will have a `code` property
-set to the HTTP response code and a `headers` property with the HTTP headers
-in the response.
+An error object indicating what went wrong.
+
+The `headers` property will contain the HTTP headers of the response.
+
+If the action was denied because an OTP is required then `code` will be set
+to `otp`.
+
+If the action was denied because it came from an IP address that this action
+on this account isn't allowed from then the `code` will be set to `ipaddress`.
+
+Otherwise the code will be the HTTP response code.
 
 ### profile.removeToken(token|key, config) → Promise
 
@@ -270,9 +326,17 @@ No value.
 
 #### **Promise Rejection**
 
-An error object indicating what went wrong.  It will have a `code` property
-set to the HTTP response code and a `headers` property with the HTTP headers
-in the response.
+An error object indicating what went wrong.
+
+The `headers` property will contain the HTTP headers of the response.
+
+If the action was denied because an OTP is required then `code` will be set
+to `otp`.
+
+If the action was denied because it came from an IP address that this action
+on this account isn't allowed from then the `code` will be set to `ipaddress`.
+
+Otherwise the code will be the HTTP response code.
 
 ### profile.createToken(password, readonly, cidr_whitelist, config) → Promise
 
@@ -313,7 +377,14 @@ The promise will resolve with an object very much like the one's returned by
 
 #### **Promise Rejection**
 
-An error object indicating what went wrong.  It will have a `code` property
-set to the HTTP response code and a `headers` property with the HTTP headers
-in the response.
+An error object indicating what went wrong.
 
+The `headers` property will contain the HTTP headers of the response.
+
+If the action was denied because an OTP is required then `code` will be set
+to `otp`.
+
+If the action was denied because it came from an IP address that this action
+on this account isn't allowed from then the `code` will be set to `ipaddress`.
+
+Otherwise the code will be the HTTP response code.
