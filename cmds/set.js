@@ -24,9 +24,17 @@ async function set (argv) {
     if (argv.property === 'cidr_whitelist') {
       info.cidr_whitelist = validateCIDR.list(argv.value)
     } else if (argv.property === 'password') {
-      const oldpassword = await read.password('Current password: ')
-      const newpassword = await read.password('New password:     ')
-      info.password = {'old': oldpassword, 'new': newpassword}
+      const oldpassword = await read.password('Current password:     ')
+      let new1password
+      let new2password
+      while (new1password !== new2password || new1password == null) {
+        new1password = await read.password('New password:         ')
+        new2password = await read.password('New password (again): ')
+        if (new1password !== new2password) {
+          console.error("Passwords didn't match, try again please!")
+        }
+      }
+      info.password = {'old': oldpassword, 'new': new1password}
     } else {
       info[argv.property] = argv.value
     }
