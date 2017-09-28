@@ -35,7 +35,7 @@ async function set (argv) {
       get: () => read.otp('Authenticator provided OTP:'),
       fn: otp => profile.set(info, {registry: argv.registry, auth: {token, otp}})
     })
-    console.log('Set', argv.property, 'to', result[argv.property])
+    console.log('Set', argv.property, result[argv.property] != null ? 'to ' + result[argv.property] : '')
   } catch (ex) {
     if (ex.code === 'E401') {
       throw ex.message
