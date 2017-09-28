@@ -13,6 +13,10 @@ async function set (argv) {
     console.error(`You can't set "${argv.property}" via this command`)
     process.exit(1)
   }
+  if (argv.property !== 'password' && argv.value == null) {
+    console.error(`npm-profile set ${argv.property} <value>`)
+    process.exit(1)
+  }
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)

@@ -72,7 +72,7 @@ const argv = yargs
     handler: run('get')
   })
   .command({
-    command: 'set <property> <value>',
+    command: 'set <property> [<value>]',
     desc: 'set the value of a profile property',
     handler: run('set')
   })
