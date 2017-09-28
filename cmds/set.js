@@ -6,7 +6,7 @@ const validateCIDR = require('./util/validate-cidr.js')
 const read = require('./util/read.js')
 const retryWithOTP = require('./util/retry-with-otp')
 
-const blacklist = [ 'email_verified', 'tfa' ]
+const blacklist = [ 'email_verified', 'tfa', 'name', 'created', 'updated' ]
 
 async function set (argv) {
   if (blacklist.indexOf(argv.property) !== -1) {
