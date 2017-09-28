@@ -32,7 +32,7 @@ async function status (argv) {
     }
     console.log('two factor authentication:', status)
   } catch (ex) {
-    if (ex.code === 401) {
+    if (ex.code === 'E401') {
       throw ex.message
     } else {
       throw ex
@@ -81,7 +81,7 @@ async function enable (argv) {
     console.log('You will need these to recover access to your account if you lose your authentication device.')
     result.tfa.forEach(c => console.log('\t' + c))
   } catch (ex) {
-    if (ex.code === 401) {
+    if (ex.code === 'E401') {
       throw ex.message
     } else {
       throw ex
@@ -101,7 +101,7 @@ async function disable (argv) {
     })
     console.log(result)
   } catch (ex) {
-    if (ex.code === 401) {
+    if (ex.code === 'E401') {
       throw ex.message
     } else {
       throw ex

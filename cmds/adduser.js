@@ -21,7 +21,7 @@ async function adduser (argv) {
       console.error('\n')
       log.error('canceled')
       return
-    } if (ex.code === 400 || ex.code === 401 || ex.code === 409) {
+    } if (ex.code === 'E400' || ex.code === 'E401' || ex.code === 'E409') {
       throw ex.message
     } else {
       throw ex

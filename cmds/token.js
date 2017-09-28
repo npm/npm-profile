@@ -119,7 +119,7 @@ async function rm (argv) {
     })
     console.log('Token removed.')
   } catch (ex) {
-    if (ex.code === 401) {
+    if (ex.code === 'E401') {
       throw ex.message
     } else {
       throw ex

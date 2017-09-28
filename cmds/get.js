@@ -16,7 +16,7 @@ async function get (argv) {
       console.log(treeify.asTree(info, true))
     }
   } catch (ex) {
-    if (ex.code === 401) {
+    if (ex.code === 'E401') {
       throw ex.message
     } else {
       throw ex

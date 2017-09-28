@@ -33,7 +33,7 @@ async function set (argv) {
     })
     console.log('Set', argv.property, 'to', result[argv.property])
   } catch (ex) {
-    if (ex.code === 401) {
+    if (ex.code === 'E401') {
       throw ex.message
     } else {
       throw ex

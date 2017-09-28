@@ -24,7 +24,7 @@ async function login (argv) {
     if (ex.message === 'canceled') {
       console.error('\n')
       log.error('canceled')
-    } else if (ex.code === 400 || ex.code === 401 || ex.code === 409) {
+    } else if (ex.code === 'E400' || ex.code === 'E401' || ex.code === 'E409') {
       throw ex.message
     } else {
       throw ex
