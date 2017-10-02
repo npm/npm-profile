@@ -207,25 +207,27 @@ Enabling two-factor authentication is a multi-step process.
 1. Call `profile.get` and check the status of `tfa`. If `pending` is true then
    you'll need to disable it with `profile.set({tfa: {password, mode: 'disable'}, …)`.
 2. `profile.set({tfa: {password, mode}}, {registry, auth: {token}})`
-   * Note that the user's `password` is required here in the `tfa` object, regardless of auth.
-   * `mode` is either `auth-only` which requires `otp` when calling `login`
+   * Note that the user's `password` is required here in the `tfa` object,
+     regardless of how you're authenticating.
+   * `mode` is either `auth-only` which requires an `otp` when calling `login`
      or `createToken`, or `mode` is `auth-and-writes` and an `otp` will be
-     required when publishing.
+     required on login, publishing or when granting others access to your
+     modules.
    * Be aware that this set call may require otp as part of the auth object.
      If otp is needed it will be indicated through a rejection in the usual
      way.
 3. If tfa was already enabled then you're just switch modes and a
-   successful response means that you're done. If the tfa property is empty and
-   tfa _wasn't_ enabled then it means they were in a pending state.
+   successful response means that you're done.  If the tfa property is empty
+   and tfa _wasn't_ enabled then it means they were in a pending state.
 3. The response will have a `tfa` property set to an `otpauth` URL, as
    [used by Google Authenticator](https://github.com/google/google-authenticator/wiki/Key-Uri-Format).
    You will need to show this to the user for them to add to their
-   authenticator application.  This is typically done as a QRCODE, but you can
-   also show the value of the `secret` key in the `otpauth` query string and
-   they can type or copy paste that in.
-4. To complete setting up two factor auth you need to make a second call to `profile.set` with
-   `tfa` set to an array of TWO codes from the user's authenticator, eg:
-   `profile.set(tfa: [otp1, otp2]}, registry, {token})`
+   authenticator application.  This is typically done as a QRCODE, but you
+   can also show the value of the `secret` key in the `otpauth` query string
+   and they can type or copy paste that in.
+4. To complete setting up two factor auth you need to make a second call to
+   `profile.set` with `tfa` set to an array of TWO codes from the user's
+   authenticator, eg: `profile.set(tfa: [otp1, otp2]}, registry, {token})`
 5. On success you'll get a result object with a `tfa` property that has an
    array of one-time-use recovery codes.  These are used to authenticate
    later if the second factor is lost and generally should be printed and
