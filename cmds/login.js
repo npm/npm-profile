@@ -12,7 +12,7 @@ async function login (argv) {
   try {
     const username = await read.username(argv.username, opts)
     const password = await read.password()
-    const result =  await retryWithOTP({
+    const result = await retryWithOTP({
       otp: argv.otp,
       get: () => read.otp('Authenticator provided OTP:'),
       fn: otp => profile.login(username, password, {registry: argv.registry, auth: {otp}})
