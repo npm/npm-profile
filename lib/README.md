@@ -1,6 +1,6 @@
 # npm-profile
 
-Updating an npmjs.com profile
+Provides functions for fetching and updating an npmjs.com profile.
 
 ```js
 const profile = require('npm-profile')
@@ -8,6 +8,11 @@ profile.get(registry, {token}).then(result => {
    // …
 })
 ```
+
+The API that this implements is documented here:
+
+* [authentication](https://github.com/npm/registry/blob/master/docs/user/authentication.md)
+* [profile editing](https://github.com/npm/registry/blob/master/docs/user/profile.md) (and two-factor authentication)
 
 ## Functions
 
