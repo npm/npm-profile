@@ -1,6 +1,6 @@
 {
   "name": "npm-profile-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Edit your npmjs.com profile from the command line",
   "bin": {
     "npm-profile-cli": "cli.js"
