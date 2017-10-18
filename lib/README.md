@@ -50,12 +50,13 @@ An error object indicating what went wrong.
 The `headers` property will contain the HTTP headers of the response.
 
 If the action was denied because an OTP is required then `code` will be set
-to `otp`.
+to `EOTP`.
 
 If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `ipaddress`.
+on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
 
-Otherwise the code will be the HTTP response code.
+Otherwise the code will be `'E'` followed by the HTTP response code, for
+example a Forbidden response would be `E403`.
 
 ### profile.login(username, password, config) → Promise
 
@@ -93,11 +94,11 @@ An object with a `token` property that can be passed into future authentication 
 
 An error object indicating what went wrong.
 
-If the object has a `code` property set to `otp` then that indicates that
+If the object has a `code` property set to `EOTP` then that indicates that
 this account must use two-factor authentication to login.  Try again with a
 one-time password.
 
-If the object has a `code` property set to `ip` then that indicates that
+If the object has a `code` property set to `EAUTHIP` then that indicates that
 this account is only allowed to login from certain networks and this ip is
 not on one of those networks.
 
@@ -157,10 +158,10 @@ An error object indicating what went wrong.
 The `headers` property will contain the HTTP headers of the response.
 
 If the action was denied because an OTP is required then `code` will be set
-to `otp`.
+to `EOTP`.
 
 If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `ipaddress`.
+on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
 
 Otherwise the code will be the HTTP response code.
 
@@ -256,10 +257,10 @@ An error object indicating what went wrong.
 The `headers` property will contain the HTTP headers of the response.
 
 If the action was denied because an OTP is required then `code` will be set
-to `otp`.
+to `EOTP`.
 
 If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `ipaddress`.
+on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
 
 Otherwise the code will be the HTTP response code.
 
@@ -300,10 +301,10 @@ An error object indicating what went wrong.
 The `headers` property will contain the HTTP headers of the response.
 
 If the action was denied because an OTP is required then `code` will be set
-to `otp`.
+to `EOTP`.
 
 If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `ipaddress`.
+on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
 
 Otherwise the code will be the HTTP response code.
 
@@ -338,10 +339,10 @@ An error object indicating what went wrong.
 The `headers` property will contain the HTTP headers of the response.
 
 If the action was denied because an OTP is required then `code` will be set
-to `otp`.
+to `EOTP`.
 
 If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `ipaddress`.
+on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
 
 Otherwise the code will be the HTTP response code.
 
@@ -389,9 +390,9 @@ An error object indicating what went wrong.
 The `headers` property will contain the HTTP headers of the response.
 
 If the action was denied because an OTP is required then `code` will be set
-to `otp`.
+to `EOTP`.
 
 If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `ipaddress`.
+on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
 
 Otherwise the code will be the HTTP response code.
