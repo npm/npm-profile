@@ -396,3 +396,33 @@ If the action was denied because it came from an IP address that this action
 on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
 
 Otherwise the code will be the HTTP response code.
+
+## Logging
+
+This modules logs by emitting `log` events on the global `process` object.
+These events look like this:
+
+```
+process.emit('log', 'loglevel', 'feature', 'message part 1', 'part 2', 'part 3', 'etc')
+```
+
+`loglevel` can be one of: `error`, `warn`, `notice`, `http`, `timing`, `info`, `verbose`, and `silly`.
+
+`feature` is any brief string that describes the component doing the logging.
+
+The remaining arguments are evaluated like `console.log` and joined together with spaces.
+
+A real world example of this is:
+
+```
+  process.emit('log', 'http', 'request', '→',conf.method || 'GET', conf.target)
+```
+
+To handle the log events, you would do something like this:
+
+```
+const log = require('npmlog')
+process.on('log', function (level) {
+  return log[level].apply(log, [].slice.call(arguments, 1))
+})
+```
