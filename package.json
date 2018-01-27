@@ -17,6 +17,7 @@
     "make-fetch-happen": "^2.5.0",
     "npm-user-validate": "^1.0.0",
     "npmlog": "*",
+    "opener": "^1.4.3",
     "qrcode-terminal": "^0.11.0",
     "query-string": "^5.0.0",
     "read": "^1.0.7",
@@ -33,7 +34,8 @@
     "tap": "^11.0.1"
   },
   "scripts": {
-    "test": "standard && tap lib/test"
+    "test": "standard && tap lib/test --cov --nyc-arg=--include=lib/*.js",
+    "snap": "TAP_SNAPSHOT=1 tap lib/test"
   },
   "repository": {
     "type": "git",
@@ -54,6 +56,7 @@
     "cmds/token.js",
     "cmds/util/log.js",
     "cmds/util/npmrc.js",
+    "cmds/util/opener.js",
     "cmds/util/read.js",
     "cmds/util/validate-cidr.js",
     "cmds/util/retry-with-otp.js",
