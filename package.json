@@ -56,6 +56,7 @@
     "cmds/token.js",
     "cmds/util/log.js",
     "cmds/util/npmrc.js",
+    "cmds/util/opener.js",
     "cmds/util/read.js",
     "cmds/util/validate-cidr.js",
     "cmds/util/retry-with-otp.js",

@@ -13,28 +13,22 @@ const prompter = async creds => {
   return creds
 }
 
-
-// when called, this already has name and password
-const readOTP = async () => {
-  return await read.otp('Authenticator provided OTP:')
-}
+// when called, we already have name and password
+const readOTP = async otp => read.otp('Authenticator provided OTP:', otp)
 
 async function login (argv) {
   const conf = await npmrc.read(argv.config)
-  const opts = { log: log }
   conf.registry = argv.registry
   conf.creds = conf.creds || {}
-  if (argv.username)
-    conf.creds.name = argv.username
+  if (argv.username) { conf.creds.name = argv.username }
   let result
   try {
     try {
       result = await profile.login(opener, prompter, conf)
     } catch (er) {
-      if (er.code !== 'EOTP')
-        throw er
+      if (er.code !== 'EOTP') { throw er }
       conf.auth = conf.auth || {}
-      conf.auth.otp = await readOTP()
+      conf.auth.otp = await readOTP(argv.otp)
       const name = conf.creds.name
       const pass = conf.creds.password
       result = await profile.loginCouch(name, pass, conf)
