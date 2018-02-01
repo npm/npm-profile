@@ -3583,8 +3583,7 @@
     "opener": {
       "version": "1.4.3",
       "resolved": "https://registry.npmjs.org/opener/-/opener-1.4.3.tgz",
-      "integrity": "sha1-XG2ixdflgx6P+jlklQ+NZnSskLg=",
-      "dev": true
+      "integrity": "sha1-XG2ixdflgx6P+jlklQ+NZnSskLg="
     },
     "optionator": {
       "version": "0.8.2",

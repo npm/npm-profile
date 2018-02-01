@@ -20,6 +20,8 @@ async function read (file) {
 }
 
 function write (file, conf) {
+  delete conf.auth
+  delete conf.creds
   return writeFile(file, ini.encode(conf))
 }
 
