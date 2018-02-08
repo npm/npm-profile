@@ -34,7 +34,7 @@
     "tap": "^11.0.1"
   },
   "scripts": {
-    "test": "standard && tap lib/test",
+    "test": "standard && tap lib/test --cov --nyc-arg=--include=lib/*.js",
     "snap": "TAP_SNAPSHOT=1 tap lib/test"
   },
   "repository": {
