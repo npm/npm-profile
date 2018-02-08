@@ -113,7 +113,7 @@ function run (cmd, subcmd) {
     const args = [argv].concat(argv._.slice(1).map(v => String(v)))
     if (!argv.registry) {
       const conf = npmrc.read(argv.config)
-      argv.registry = conf.registry || 'http://registry.npmjs.org'
+      argv.registry = conf.registry || 'https://registry.npmjs.org'
     }
     Bluebird.try(() => {
       let action = require(`./cmds/${cmd}.js`)
