@@ -1,4 +1,8 @@
-# v3.0.0 (2018-02-19)
+# v3.0.1 (2018-02-18)
+
+- Log `npm-notice` headers
+
+# v3.0.0 (2018-02-18)
 
 ## BREAKING CHANGES:
 
