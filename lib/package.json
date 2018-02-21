@@ -1,6 +1,6 @@
 {
   "name": "npm-profile",
-  "version": "2.0.5",
+  "version": "3.0.0",
   "description": "Library for updating an npmjs.com profile",
   "keywords": [],
   "author": "Rebecca Turner <me@re-becca.org> (http://re-becca.org/)",
