@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/npm/npm-profile/tree/latest/lib#readme",
   "files": [
+    "CHANGELOG.md",
     "index.js"
   ]
 }
