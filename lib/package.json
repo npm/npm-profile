@@ -7,7 +7,8 @@
   "license": "ISC",
   "dependencies": {
     "aproba": "^1.1.2 || 2",
-    "make-fetch-happen": "^2.5.0 || 3 || 4"
+    "figgy-pudding": "^3.4.1",
+    "npm-registry-fetch": "^3.3.0"
   },
   "main": "index.js",
   "repository": {
