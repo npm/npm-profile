@@ -22,7 +22,7 @@
     "query-string": "^5.0.0",
     "read": "^1.0.7",
     "treeify": "^1.0.1",
-    "yargs": "^8.0.2"
+    "yargs": "^11.0.0"
   },
   "main": "index.js",
   "directories": {
