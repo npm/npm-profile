@@ -5061,9 +5061,9 @@
       "dev": true
     },
     "qrcode-terminal": {
-      "version": "0.11.0",
-      "resolved": "https://registry.npmjs.org/qrcode-terminal/-/qrcode-terminal-0.11.0.tgz",
-      "integrity": "sha1-/8bCii/Av7RwUrR+I/T0RqX7254="
+      "version": "0.12.0",
+      "resolved": "https://registry.npmjs.org/qrcode-terminal/-/qrcode-terminal-0.12.0.tgz",
+      "integrity": "sha512-EXtzRZmC+YGmGlDFbXKxQiMZNwCLEO6BANKXG4iCtSIM0yqc/pappSx3RIKr4r0uh5JsBckOXeKrB3Iz7mdQpQ=="
     },
     "qs": {
       "version": "6.5.2",
