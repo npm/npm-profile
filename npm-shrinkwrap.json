@@ -1976,9 +1976,9 @@
       }
     },
     "npm-registry-fetch": {
-      "version": "3.5.0",
-      "resolved": "https://registry.npmjs.org/npm-registry-fetch/-/npm-registry-fetch-3.5.0.tgz",
-      "integrity": "sha512-9LhdRrd5kHDXVpaj7HF1RyN2B9Z8Ib/Ed2RcBWlM4UmXRfiIAwc0OarJFSgDne0DiY09NbxhEOflXqC5auu49g==",
+      "version": "3.6.0",
+      "resolved": "https://registry.npmjs.org/npm-registry-fetch/-/npm-registry-fetch-3.6.0.tgz",
+      "integrity": "sha512-grqgeWO0SQ0o7WiZD2fRETSqjfXxcYM++44exkENWMbV2xOPGjb7vgMsHmnTiW/GjRyta/H2yF8hQIEyf63n8A==",
       "requires": {
         "bluebird": "^3.5.1",
         "figgy-pudding": "^3.4.1",
