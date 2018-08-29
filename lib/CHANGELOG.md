@@ -1,3 +1,8 @@
+# v4.0.1 (2018-08-29)
+
+- `opts.password` needs to be base64-encoded when passed in for login
+- Bump `npm-registry-fetch` dep because we depend on `opts.forceAuth`
+
 # v4.0.0 (2018-08-28)
 
 ## BREAKING CHANGES:
