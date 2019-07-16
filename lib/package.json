@@ -8,7 +8,7 @@
   "dependencies": {
     "aproba": "^1.1.2 || 2",
     "figgy-pudding": "^3.4.1",
-    "npm-registry-fetch": "^3.8.0"
+    "npm-registry-fetch": "^4.0.0"
   },
   "main": "index.js",
   "repository": {
