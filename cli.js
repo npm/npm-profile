@@ -60,7 +60,7 @@ const argv = yargs
       })
       .command({
         command: 'delete <id>',
-        aliases: [ 'rm' ],
+        aliases: ['rm'],
         desc: 'remove an authentication token',
         handler: run('token', 'rm')
       })
@@ -77,7 +77,7 @@ const argv = yargs
   })
   .command({
     command: '2fa [status|enable|disable]',
-    aliases: [ 'tfa' ],
+    aliases: ['tfa'],
     desc: 'control two factor authentication for this account',
     builder: yargs => yargs
       .command({

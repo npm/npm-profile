@@ -6,7 +6,7 @@ const validateCIDR = require('./util/validate-cidr.js')
 const read = require('./util/read.js')
 const retryWithOTP = require('./util/retry-with-otp')
 
-const blacklist = [ 'email_verified', 'tfa', 'name', 'created', 'updated' ]
+const blacklist = ['email_verified', 'tfa', 'name', 'created', 'updated']
 
 async function set (argv) {
   if (blacklist.indexOf(argv.property) !== -1) {
@@ -34,14 +34,14 @@ async function set (argv) {
           console.error("Passwords didn't match, try again please!")
         }
       }
-      info.password = {'old': oldpassword, 'new': new1password}
+      info.password = { old: oldpassword, new: new1password }
     } else {
       info[argv.property] = argv.value
     }
     const result = await retryWithOTP({
       otp: argv.otp,
       get: () => read.otp('Authenticator provided OTP:'),
-      fn: otp => profile.set(info, {registry: argv.registry, auth: {token, otp}})
+      fn: otp => profile.set(info, { registry: argv.registry, auth: { token, otp } })
     })
     console.log('Set', argv.property, result[argv.property] != null ? 'to ' + result[argv.property] : '')
   } catch (ex) {

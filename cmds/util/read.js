@@ -1,5 +1,5 @@
 'use strict'
-const {promisify} = require('util')
+const { promisify } = require('util')
 const read = promisify(require('read'))
 const userValidate = require('npm-user-validate')
 
@@ -11,7 +11,7 @@ exports.email = readEmail
 function readOTP (msg, otp) {
   if (otp && /^[\d ]+$/.test(otp)) return otp.replace(/\s+/g, '')
 
-  return read({prompt: msg, default: otp || ''})
+  return read({ prompt: msg, default: otp || '' })
     .then(otp => readOTP(msg, otp))
 }
 
@@ -19,7 +19,7 @@ function readPassword (prompt, password) {
   if (!prompt) prompt = 'Password: '
   if (password) return password
 
-  return read({prompt, silent: true, default: password || ''})
+  return read({ prompt, silent: true, default: password || '' })
     .then(password => readPassword(prompt, password))
 }
 
@@ -33,7 +33,7 @@ function readUsername (username, opts) {
     }
   }
 
-  return read({prompt: 'Username: ', default: username || ''})
+  return read({ prompt: 'Username: ', default: username || '' })
     .then(username => readUsername(username, opts))
 }
 
@@ -47,6 +47,6 @@ function readEmail (email, opts) {
     }
   }
 
-  return read({prompt: 'Email (this IS public): ', default: email || ''})
+  return read({ prompt: 'Email (this IS public): ', default: email || '' })
     .then(username => readEmail(username, opts))
 }

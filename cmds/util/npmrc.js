@@ -1,7 +1,7 @@
 'use strict'
 const ini = require('ini')
 const fs = require('fs')
-const {promisify} = require('util')
+const { promisify } = require('util')
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const url = require('url')
@@ -36,11 +36,10 @@ function setAuthToken (conf, registry, token) {
 }
 
 function registryKey (registry) {
-  const parsed = url.parse(registry)
-  const formatted = url.format({
+  const parsed = new url.URL('.', registry)
+  return url.format({
     host: parsed.host,
     pathname: parsed.pathname,
-    slashes: parsed.slashes
+    slashes: true
   })
-  return url.resolve(formatted, '.')
 }

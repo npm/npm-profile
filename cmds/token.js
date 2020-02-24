@@ -19,7 +19,7 @@ function table () {
       head.padding = [0, 2, 0, 0]
     }
   })
-  const ui = cliui({width: process.stdout.columns})
+  const ui = cliui({ width: process.stdout.columns })
   ui.div.apply(ui, headers)
   const td = function () {
     const data = [].slice.apply(arguments).map((value, ii) => {
@@ -52,15 +52,15 @@ async function list (argv) {
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
-    const tokens = await profile.listTokens({registry: argv.registry, auth: {token, otp: argv.otp}})
+    const tokens = await profile.listTokens({ registry: argv.registry, auth: { token, otp: argv.otp } })
     generateTokenIds(tokens, 6)
     const idWidth = tokens.reduce((acc, token) => Math.max(acc, token.id.length), 0)
     const td = table(
-      {text: 'id', width: Math.max(idWidth, 2)},
-      {text: 'token', width: 7},
-      {text: 'created', width: 10},
-      {text: 'readonly', width: 8},
-      {text: 'CIDR whitelist'}
+      { text: 'id', width: Math.max(idWidth, 2) },
+      { text: 'token', width: 7 },
+      { text: 'created', width: 10 },
+      { text: 'readonly', width: 8 },
+      { text: 'CIDR whitelist' }
     )
     tokens.forEach(token => {
       td(token.id, token.token + '…', token.created, token.readonly ? 'yes' : 'no', token.cidr_whitelist ? token.cidr_whitelist.join(', ') : '')
@@ -84,7 +84,7 @@ async function create (argv) {
     const result = await retryWithOTP({
       otp: argv.otp,
       get: () => read.otp('Authenticator provided OTP:'),
-      fn: otp => profile.createToken(password, argv.readonly, cidr, {registry: argv.registry, auth: {token, otp}})
+      fn: otp => profile.createToken(password, argv.readonly, cidr, { registry: argv.registry, auth: { token, otp } })
     })
     console.log(treeify.asTree(result, true))
   } catch (ex) {
@@ -100,7 +100,7 @@ async function rm (argv) {
   try {
     const conf = await npmrc.read(argv.config)
     const token = npmrc.getAuthToken(conf, argv.registry)
-    const tokens = await profile.listTokens({registry: argv.registry, auth: {token, otp: argv.otp}})
+    const tokens = await profile.listTokens({ registry: argv.registry, auth: { token, otp: argv.otp } })
     const byId = generateTokenIds(tokens, 6)
     if (!byId[argv.id]) {
       if (tokens.some(token => token.id.slice(0, argv.id.length) === argv.id)) {
@@ -115,7 +115,7 @@ async function rm (argv) {
     await retryWithOTP({
       otp: argv.otp,
       get: () => read.otp('Authenticator provided OTP:'),
-      fn: otp => profile.removeToken(key, {registry: argv.registry, auth: {token, otp}})
+      fn: otp => profile.removeToken(key, { registry: argv.registry, auth: { token, otp } })
     })
     console.log('Token removed.')
   } catch (ex) {
