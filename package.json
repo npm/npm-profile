@@ -62,5 +62,8 @@
     "cmds/util/validate-cidr.js",
     "cmds/util/retry-with-otp.js",
     "lib/index.js"
-  ]
+  ],
+  "engines": {
+    "node": ">=10"
+  }
 }
