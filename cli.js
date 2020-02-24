@@ -2,7 +2,6 @@
 'use strict'
 const os = require('os')
 const path = require('path')
-const Bluebird = require('bluebird')
 const log = require('npmlog')
 const yargs = require('yargs')
 const npmrc = require('./cmds/util/npmrc.js')
@@ -115,13 +114,10 @@ function run (cmd, subcmd) {
       const conf = npmrc.read(argv.config)
       argv.registry = conf.registry || 'https://registry.npmjs.org'
     }
-    Bluebird.try(() => {
+    return Promise.resolve().then(() => {
       let action = require(`./cmds/${cmd}.js`)
       if (subcmd) action = action[subcmd]
       return action.apply(null, args)
-    }).error(ex => {
-      console.error(ex.stack)
-      process.exit(1)
     }).catch(ex => {
       console.error(ex.stack || ex)
       process.exit(1)

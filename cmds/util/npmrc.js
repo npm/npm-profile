@@ -1,9 +1,9 @@
 'use strict'
 const ini = require('ini')
-const Bluebird = require('bluebird')
 const fs = require('fs')
-const readFile = Bluebird.promisify(fs.readFile)
-const writeFile = Bluebird.promisify(fs.writeFile)
+const {promisify} = require('util')
+const readFile = promisify(fs.readFile)
+const writeFile = promisify(fs.writeFile)
 const url = require('url')
 
 exports.read = read
