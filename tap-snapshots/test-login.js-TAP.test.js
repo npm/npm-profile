@@ -5,7 +5,7 @@
  * Make sure to inspect the output below.  Do not ignore changes!
  */
 'use strict'
-exports[`lib/test/login.js TAP cleanup > got expected requests 1`] = `
+exports[`test/login.js TAP cleanup > got expected requests 1`] = `
 [
   "start server",
   "login web",

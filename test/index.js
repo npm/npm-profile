@@ -1,7 +1,7 @@
 'use strict'
 
 const test = require('tap').test
-const tnock = require('./util/tnock.js')
+const tnock = require('./fixtures/tnock.js')
 
 const profile = require('../index.js')
 
