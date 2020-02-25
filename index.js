@@ -3,23 +3,9 @@
 const fetch = require('npm-registry-fetch')
 const { HttpErrorBase } = require('npm-registry-fetch/errors.js')
 const os = require('os')
-const validate = require('aproba')
-
-exports.adduserCouch = adduserCouch
-exports.loginCouch = loginCouch
-exports.adduserWeb = adduserWeb
-exports.loginWeb = loginWeb
-exports.login = login
-exports.adduser = adduser
-exports.get = get
-exports.set = set
-exports.listTokens = listTokens
-exports.removeToken = removeToken
-exports.createToken = createToken
 
 // try loginWeb, catch the "not supported" message and fall back to couch
-function login (opener, prompter, opts) {
-  validate('FFO', arguments)
+const login = (opener, prompter, opts = {}) => {
   const { creds } = opts
   return loginWeb(opener, opts).catch(er => {
     if (er instanceof WebLoginNotSupported) {
@@ -32,8 +18,7 @@ function login (opener, prompter, opts) {
   })
 }
 
-function adduser (opener, prompter, opts) {
-  validate('FFO', arguments)
+const adduser = (opener, prompter, opts = {}) => {
   const { creds } = opts
   return adduserWeb(opener, opts).catch(er => {
     if (er instanceof WebLoginNotSupported) {
@@ -46,20 +31,17 @@ function adduser (opener, prompter, opts) {
   })
 }
 
-function adduserWeb (opener, opts) {
-  validate('FO', arguments)
-  const body = { create: true }
+const adduserWeb = (opener, opts = {}) => {
   process.emit('log', 'verbose', 'web adduser', 'before first POST')
-  return webAuth(opener, opts, body)
+  return webAuth(opener, opts, { create: true })
 }
 
-function loginWeb (opener, opts) {
-  validate('FO', arguments)
+const loginWeb = (opener, opts = {}) => {
   process.emit('log', 'verbose', 'web login', 'before first POST')
   return webAuth(opener, opts, {})
 }
 
-function webAuth (opener, opts, body) {
+const webAuth = (opener, opts, body) => {
   const { hostname } = opts
   body.hostname = hostname || os.hostname()
   const target = '/-/v1/login'
@@ -98,7 +80,7 @@ function webAuth (opener, opts, body) {
   })
 }
 
-function webAuthCheckLogin (doneUrl, opts) {
+const webAuthCheckLogin = (doneUrl, opts) => {
   return fetch(doneUrl, opts).then(res => {
     return Promise.all([res, res.json()])
   }).then(([res, content]) => {
@@ -121,8 +103,7 @@ function webAuthCheckLogin (doneUrl, opts) {
   })
 }
 
-function adduserCouch (username, email, password, opts) {
-  validate('SSSO', arguments)
+const adduserCouch = (username, email, password, opts = {}) => {
   const body = {
     _id: 'org.couchdb.user:' + username,
     name: username,
@@ -132,10 +113,10 @@ function adduserCouch (username, email, password, opts) {
     roles: [],
     date: new Date().toISOString()
   }
-  const logObj = {}
-  Object.keys(body).forEach(k => {
-    logObj[k] = k === 'password' ? 'XXXXX' : body[k]
-  })
+  const logObj = {
+    ...body,
+    password: 'XXXXX'
+  }
   process.emit('log', 'verbose', 'adduser', 'before first PUT', logObj)
 
   const target = '/-/user/org.couchdb.user:' + encodeURIComponent(username)
@@ -149,8 +130,7 @@ function adduserCouch (username, email, password, opts) {
   })
 }
 
-function loginCouch (username, password, opts) {
-  validate('SSO', arguments)
+const loginCouch = (username, password, opts = {}) => {
   const body = {
     _id: 'org.couchdb.user:' + username,
     name: username,
@@ -159,10 +139,10 @@ function loginCouch (username, password, opts) {
     roles: [],
     date: new Date().toISOString()
   }
-  const logObj = {}
-  Object.keys(body).forEach(k => {
-    logObj[k] = k === 'password' ? 'XXXXX' : body[k]
-  })
+  const logObj = {
+    ...body,
+    password: 'XXXXX'
+  }
   process.emit('log', 'verbose', 'login', 'before first PUT', logObj)
 
   const target = '-/user/org.couchdb.user:' + encodeURIComponent(username)
@@ -180,7 +160,7 @@ function loginCouch (username, password, opts) {
       ...opts,
       query: { write: true }
     }).then(result => {
-      Object.keys(result).forEach(function (k) {
+      Object.keys(result).forEach(k => {
         if (!body[k] || k === 'roles') {
           body[k] = result[k]
         }
@@ -203,13 +183,9 @@ function loginCouch (username, password, opts) {
   })
 }
 
-function get (opts) {
-  validate('O', arguments)
-  return fetch.json('/-/npm/v1/user', opts)
-}
+const get = (opts = {}) => fetch.json('/-/npm/v1/user', opts)
 
-function set (profile, opts) {
-  validate('OO', arguments)
+const set = (profile, opts = {}) => {
   Object.keys(profile).forEach(key => {
     // profile keys can't be empty strings, but they CAN be null
     if (profile[key] === '') profile[key] = null
@@ -221,12 +197,8 @@ function set (profile, opts) {
   })
 }
 
-function listTokens (opts) {
-  validate('O', arguments)
-
-  return untilLastPage('/-/npm/v1/tokens')
-
-  function untilLastPage (href, objects) {
+const listTokens = (opts = {}) => {
+  const untilLastPage = (href, objects) => {
     return fetch.json(href, opts).then(result => {
       objects = objects ? objects.concat(result.objects) : result.objects
       if (result.urls.next) {
@@ -236,10 +208,10 @@ function listTokens (opts) {
       }
     })
   }
+  return untilLastPage('/-/npm/v1/tokens')
 }
 
-function removeToken (tokenKey, opts) {
-  validate('SO', arguments)
+const removeToken = (tokenKey, opts = {}) => {
   const target = `/-/npm/v1/tokens/token/${tokenKey}`
   return fetch(target, {
     ...opts,
@@ -248,8 +220,7 @@ function removeToken (tokenKey, opts) {
   }).then(() => null)
 }
 
-function createToken (password, readonly, cidrs, opts) {
-  validate('SBAO', arguments)
+const createToken = (password, readonly, cidrs, opts = {}) => {
   return fetch.json('/-/npm/v1/tokens', {
     ...opts,
     method: 'POST',
@@ -278,6 +249,19 @@ class WebLoginNotSupported extends HttpErrorBase {
   }
 }
 
-function sleep (ms) {
-  return new Promise((resolve, reject) => setTimeout(resolve, ms))
+const sleep = (ms) =>
+  new Promise((resolve, reject) => setTimeout(resolve, ms))
+
+module.exports = {
+  adduserCouch,
+  loginCouch,
+  adduserWeb,
+  loginWeb,
+  login,
+  adduser,
+  get,
+  set,
+  listTokens,
+  removeToken,
+  createToken
 }

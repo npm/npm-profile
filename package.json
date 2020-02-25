@@ -6,7 +6,6 @@
   "author": "Rebecca Turner <me@re-becca.org> (http://re-becca.org/)",
   "license": "ISC",
   "dependencies": {
-    "aproba": "^1.1.2 || 2",
     "npm-registry-fetch": "^4.0.0"
   },
   "main": "index.js",

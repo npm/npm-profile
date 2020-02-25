@@ -5,7 +5,7 @@ const tnock = require('./fixtures/tnock.js')
 
 const profile = require('../index.js')
 
-const registry = 'https://my.registry.tech/'
+const registry = 'https://registry.npmjs.org/'
 
 test('get', t => {
   const srv = tnock(t, registry)
@@ -15,7 +15,7 @@ test('get', t => {
     t.notOk(auth, 'no authorization info sent')
     return [auth ? 200 : 401, '', {}]
   })
-  return profile.get({ registry }).then(result => {
+  return profile.get().then(result => {
     t.fail('GET w/o auth should fail')
   }, err => {
     t.is(err.code, 'E401', 'auth errors are passed through')
@@ -25,7 +25,7 @@ test('get', t => {
       t.deepEqual(auth, ['Bearer deadbeef'], 'got auth header')
       return [auth ? 200 : 401, { auth: 'bearer' }, {}]
     })
-    return profile.get({ registry, token: 'deadbeef' })
+    return profile.get({ token: 'deadbeef' })
   }).then(result => {
     t.like(result, { auth: 'bearer' })
   }).then(() => {
@@ -40,7 +40,6 @@ test('get', t => {
       return [auth ? 200 : 401, { auth: 'basic' }, {}]
     })
     return profile.get({
-      registry,
       username: 'abc',
       // Passwords are stored in base64 form and npm-related consumers expect
       // them in this format. Changing this for npm would be a bigger change.
@@ -56,7 +55,7 @@ test('get', t => {
       t.deepequal(otp, ['1234'], 'got otp token')
       return [auth ? 200 : 401, { auth: 'bearer', otp: !!otp }, {}]
     })
-    return profile.get({ registry, otp: '1234', token: 'deadbeef' })
+    return profile.get({ otp: '1234', token: 'deadbeef' })
   }).then(result => {
     t.like(result, { auth: 'bearer', otp: true })
   })
@@ -73,7 +72,7 @@ test('set', t => {
   return profile.set({
     github: 'zkat',
     email: ''
-  }, { registry }).then(json => {
+  }).then(json => {
     t.deepEqual(json, prof, 'got the profile data in return')
   })
 })
@@ -88,8 +87,105 @@ test('listTokens', t => {
     total: 2,
     urls: {}
   })
-  return profile.listTokens({ registry }).then(tok => t.deepEqual(tok, tokens))
+  return profile.listTokens().then(tok => t.deepEqual(tok, tokens))
 })
+
+test('loginCouch happy path', t => {
+  tnock(t, registry)
+    .put('/-/user/org.couchdb.user:blerp')
+    .reply(201, {
+      ok: true
+    })
+  return t.resolveMatch(profile.loginCouch('blerp', 'password'), {
+    ok: true,
+    username: 'blerp'
+  })
+})
+
+test('login fallback to couch', t => {
+  tnock(t, registry)
+    .put('/-/user/org.couchdb.user:blerp')
+    .reply(201, {
+      ok: true
+    })
+    .post('/-/v1/login')
+    .reply(404, { error: 'not found' })
+  const opener = url => t.fail('called opener', { url })
+  const prompter = creds => Promise.resolve({
+    username: 'blerp',
+    password: 'prelb',
+    email: 'blerp@blerp.blerp',
+  })
+  return t.resolveMatch(profile.login(opener, prompter), {
+    ok: true,
+    username: 'blerp'
+  })
+})
+
+test('adduserCouch happy path', t => {
+  tnock(t, registry)
+    .put('/-/user/org.couchdb.user:blerp')
+    .reply(201, {
+      ok: true
+    })
+  return t.resolveMatch(profile.adduserCouch('blerp', 'password'), {
+    ok: true,
+    username: 'blerp'
+  })
+})
+
+test('adduser fallback to couch', t => {
+  tnock(t, registry)
+    .put('/-/user/org.couchdb.user:blerp')
+    .reply(201, {
+      ok: true
+    })
+    .post('/-/v1/login')
+    .reply(404, { error: 'not found' })
+  const opener = url => t.fail('called opener', { url })
+  const prompter = creds => Promise.resolve({
+    username: 'blerp',
+    password: 'prelb',
+    email: 'blerp@blerp.blerp',
+  })
+  return t.resolveMatch(profile.adduser(opener, prompter), {
+    ok: true,
+    username: 'blerp'
+  })
+})
+
+test('adduserCouch happy path', t => {
+  tnock(t, registry)
+    .put('/-/user/org.couchdb.user:blerp')
+    .reply(201, {
+      ok: true
+    })
+  return t.resolveMatch(profile.adduserCouch('blerp', 'password'), {
+    ok: true,
+    username: 'blerp'
+  })
+})
+
+test('adduserWeb fail, just testing default opts setting', t => {
+  tnock(t, registry)
+    .post('/-/v1/login')
+    .reply(404, { error: 'not found' })
+  const opener = url => t.fail('called opener', { url })
+  return t.rejects(profile.adduserWeb(opener), {
+    message: 'Web login not supported'
+  })
+})
+
+test('loginWeb fail, just testing default opts setting', t => {
+  tnock(t, registry)
+    .post('/-/v1/login')
+    .reply(404, { error: 'not found' })
+  const opener = url => t.fail('called opener', { url })
+  return t.rejects(profile.loginWeb(opener), {
+    message: 'Web login not supported'
+  })
+})
+
 
 test('listTokens multipage', t => {
   const tokens1 = [
@@ -123,7 +219,7 @@ test('listTokens multipage', t => {
     total: 1,
     urls: {}
   })
-  return profile.listTokens({ registry }).then(tok => {
+  return profile.listTokens().then(tok => {
     t.deepEqual(
       tok,
       tokens1.concat(tokens2).concat(tokens3),
@@ -134,7 +230,7 @@ test('listTokens multipage', t => {
 
 test('removeToken', t => {
   tnock(t, registry).delete('/-/npm/v1/tokens/token/deadbeef').reply(200)
-  return profile.removeToken('deadbeef', { registry }).then(ret => {
+  return profile.removeToken('deadbeef').then(ret => {
     t.equal(ret, null, 'null return value on success')
   })
 })
@@ -155,7 +251,6 @@ test('createToken', t => {
   return profile.createToken(
     base.password,
     base.readonly,
-    base.cidr_whitelist,
-    { registry }
+    base.cidr_whitelist
   ).then(ret => t.deepEqual(ret, obj, 'got the right return value'))
 })
