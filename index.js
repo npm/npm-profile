@@ -3,7 +3,6 @@
 const fetch = require('npm-registry-fetch')
 const { HttpErrorBase } = require('npm-registry-fetch/errors.js')
 const os = require('os')
-const pudding = require('figgy-pudding')
 const validate = require('aproba')
 
 exports.adduserCouch = adduserCouch
@@ -18,20 +17,14 @@ exports.listTokens = listTokens
 exports.removeToken = removeToken
 exports.createToken = createToken
 
-const ProfileConfig = pudding({
-  creds: {},
-  hostname: {},
-  otp: {}
-})
-
 // try loginWeb, catch the "not supported" message and fall back to couch
 function login (opener, prompter, opts) {
   validate('FFO', arguments)
-  opts = ProfileConfig(opts)
+  const { creds } = opts
   return loginWeb(opener, opts).catch(er => {
     if (er instanceof WebLoginNotSupported) {
       process.emit('log', 'verbose', 'web login not supported, trying couch')
-      return prompter(opts.creds)
+      return prompter(creds)
         .then(data => loginCouch(data.username, data.password, opts))
     } else {
       throw er
@@ -41,11 +34,11 @@ function login (opener, prompter, opts) {
 
 function adduser (opener, prompter, opts) {
   validate('FFO', arguments)
-  opts = ProfileConfig(opts)
+  const { creds } = opts
   return adduserWeb(opener, opts).catch(er => {
     if (er instanceof WebLoginNotSupported) {
       process.emit('log', 'verbose', 'web adduser not supported, trying couch')
-      return prompter(opts.creds)
+      return prompter(creds)
         .then(data => adduserCouch(data.username, data.email, data.password, opts))
     } else {
       throw er
@@ -67,13 +60,14 @@ function loginWeb (opener, opts) {
 }
 
 function webAuth (opener, opts, body) {
-  opts = ProfileConfig(opts)
-  body.hostname = opts.hostname || os.hostname()
+  const { hostname } = opts
+  body.hostname = hostname || os.hostname()
   const target = '/-/v1/login'
-  return fetch(target, opts.concat({
+  return fetch(target, {
+    ...opts,
     method: 'POST',
     body
-  })).then(res => {
+  }).then(res => {
     return Promise.all([res, res.json()])
   }).then(([res, content]) => {
     const { doneUrl, loginUrl } = content
@@ -90,7 +84,7 @@ function webAuth (opener, opts, body) {
   }).then(({ doneUrl, loginUrl }) => {
     process.emit('log', 'verbose', 'web auth', 'opening url pair')
     return opener(loginUrl).then(
-      () => webAuthCheckLogin(doneUrl, opts.concat({ cache: false }))
+      () => webAuthCheckLogin(doneUrl, { ...opts, cache: false })
     )
   }).catch(er => {
     if ((er.statusCode >= 400 && er.statusCode <= 499) || er.statusCode === 500) {
@@ -129,7 +123,6 @@ function webAuthCheckLogin (doneUrl, opts) {
 
 function adduserCouch (username, email, password, opts) {
   validate('SSSO', arguments)
-  opts = ProfileConfig(opts)
   const body = {
     _id: 'org.couchdb.user:' + username,
     name: username,
@@ -146,10 +139,11 @@ function adduserCouch (username, email, password, opts) {
   process.emit('log', 'verbose', 'adduser', 'before first PUT', logObj)
 
   const target = '/-/user/org.couchdb.user:' + encodeURIComponent(username)
-  return fetch.json(target, opts.concat({
+  return fetch.json(target, {
+    ...opts,
     method: 'PUT',
     body
-  })).then(result => {
+  }).then(result => {
     result.username = username
     return result
   })
@@ -157,7 +151,6 @@ function adduserCouch (username, email, password, opts) {
 
 function loginCouch (username, password, opts) {
   validate('SSO', arguments)
-  opts = ProfileConfig(opts)
   const body = {
     _id: 'org.couchdb.user:' + username,
     name: username,
@@ -173,32 +166,36 @@ function loginCouch (username, password, opts) {
   process.emit('log', 'verbose', 'login', 'before first PUT', logObj)
 
   const target = '-/user/org.couchdb.user:' + encodeURIComponent(username)
-  return fetch.json(target, opts.concat({
+  return fetch.json(target, {
+    ...opts,
     method: 'PUT',
     body
-  })).catch(err => {
+  }).catch(err => {
     if (err.code === 'E400') {
       err.message = `There is no user with the username "${username}".`
       throw err
     }
     if (err.code !== 'E409') throw err
-    return fetch.json(target, opts.concat({
+    return fetch.json(target, {
+      ...opts,
       query: { write: true }
-    })).then(result => {
+    }).then(result => {
       Object.keys(result).forEach(function (k) {
         if (!body[k] || k === 'roles') {
           body[k] = result[k]
         }
       })
-      return fetch.json(`${target}/-rev/${body._rev}`, opts.concat({
+      const { otp } = opts
+      return fetch.json(`${target}/-rev/${body._rev}`, {
+        ...opts,
         method: 'PUT',
         body,
         forceAuth: {
           username,
           password: Buffer.from(password, 'utf8').toString('base64'),
-          otp: opts.otp
+          otp
         }
-      }))
+      })
     })
   }).then(result => {
     result.username = username
@@ -217,15 +214,15 @@ function set (profile, opts) {
     // profile keys can't be empty strings, but they CAN be null
     if (profile[key] === '') profile[key] = null
   })
-  return fetch.json('/-/npm/v1/user', ProfileConfig(opts, {
+  return fetch.json('/-/npm/v1/user', {
+    ...opts,
     method: 'POST',
     body: profile
-  }))
+  })
 }
 
 function listTokens (opts) {
   validate('O', arguments)
-  opts = ProfileConfig(opts)
 
   return untilLastPage('/-/npm/v1/tokens')
 
@@ -244,22 +241,24 @@ function listTokens (opts) {
 function removeToken (tokenKey, opts) {
   validate('SO', arguments)
   const target = `/-/npm/v1/tokens/token/${tokenKey}`
-  return fetch(target, ProfileConfig(opts, {
+  return fetch(target, {
+    ...opts,
     method: 'DELETE',
     ignoreBody: true
-  })).then(() => null)
+  }).then(() => null)
 }
 
 function createToken (password, readonly, cidrs, opts) {
   validate('SBAO', arguments)
-  return fetch.json('/-/npm/v1/tokens', ProfileConfig(opts, {
+  return fetch.json('/-/npm/v1/tokens', {
+    ...opts,
     method: 'POST',
     body: {
       password: password,
       readonly: readonly,
       cidr_whitelist: cidrs
     }
-  }))
+  })
 }
 
 class WebLoginInvalidResponse extends HttpErrorBase {
