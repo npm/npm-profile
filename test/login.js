@@ -135,6 +135,12 @@ const server = http.createServer((q, s) => {
       case '/invalid-login/-/v1/login':
         return respond(s, 200, { salt: 'im helping' })
 
+      case '/invalid-login-url/-/v1/login':
+        return respond(s, 200, {
+          loginUrl: 'this is not a url',
+          doneUrl: reg + '/invalid-done/-/v1/login'
+        })
+
       case '/invalid-done/-/v1/login':
         return respond(s, 200, {
           loginUrl: 'http://www.example.com/blerg',
@@ -394,6 +400,26 @@ t.test('fail at login step', t => {
     uri: reg + '/invalid-login/-/v1/login',
     body: {
       salt: 'im helping'
+    },
+    message: 'Invalid response from web login endpoint'
+  }
+  profile.login(opener, prompter, { registry })
+    .catch(er => t.match(er, expectedErr))
+})
+
+t.test('fail at login step by having an invalid url', t => {
+  const registry = reg + '/invalid-login-url/'
+  const opener = (url, conf) => new Promise(resolve => resolve())
+  const prompter = () => { throw new Error('should not do this') }
+  t.plan(1)
+  const expectedErr = {
+    statusCode: 200,
+    code: 'E200',
+    method: 'POST',
+    uri: reg + '/invalid-login-url/-/v1/login',
+    body: {
+      loginUrl: 'this is not a url',
+      doneUrl: reg + '/invalid-done/-/v1/login'
     },
     message: 'Invalid response from web login endpoint'
   }

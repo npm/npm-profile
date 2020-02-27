@@ -3,6 +3,7 @@
 const fetch = require('npm-registry-fetch')
 const { HttpErrorBase } = require('npm-registry-fetch/errors.js')
 const os = require('os')
+const { URL } = require('url')
 
 // try loginWeb, catch the "not supported" message and fall back to couch
 const login = (opener, prompter, opts = {}) => {
@@ -41,6 +42,14 @@ const loginWeb = (opener, opts = {}) => {
   return webAuth(opener, opts, {})
 }
 
+const isValidUrl = u => {
+  try {
+    return !!new URL(u)
+  } catch (er) {
+    return false
+  }
+}
+
 const webAuth = (opener, opts, body) => {
   const { hostname } = opts
   body.hostname = hostname || os.hostname()
@@ -54,12 +63,7 @@ const webAuth = (opener, opts, body) => {
   }).then(([res, content]) => {
     const { doneUrl, loginUrl } = content
     process.emit('log', 'verbose', 'web auth', 'got response', content)
-    if (
-      typeof doneUrl !== 'string' ||
-      typeof loginUrl !== 'string' ||
-      !doneUrl ||
-      !loginUrl
-    ) {
+    if (!isValidUrl(doneUrl) || !isValidUrl(loginUrl)) {
       throw new WebLoginInvalidResponse('POST', res, content)
     }
     return content
