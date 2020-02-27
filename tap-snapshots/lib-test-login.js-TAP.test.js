@@ -46,6 +46,8 @@ exports[`lib/test/login.js TAP cleanup > got expected requests 1`] = `
   "PUT /501/-/user/org.couchdb.user:user",
   "fail at login step",
   "POST /invalid-login/-/v1/login",
+  "fail at login step by having an invalid url",
+  "POST /invalid-login-url/-/v1/login",
   "fail at the done step",
   "POST /invalid-done/-/v1/login",
   "GET /invalid-done/-/v1/login/blerg",
