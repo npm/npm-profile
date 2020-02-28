@@ -44,7 +44,7 @@ const loginWeb = (opener, opts = {}) => {
 
 const isValidUrl = u => {
   try {
-    return !!new URL(u)
+    return /^https?:$/.test(new URL(u).protocol)
   } catch (er) {
     return false
   }

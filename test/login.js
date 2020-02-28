@@ -137,7 +137,7 @@ const server = http.createServer((q, s) => {
 
       case '/invalid-login-url/-/v1/login':
         return respond(s, 200, {
-          loginUrl: 'this is not a url',
+          loginUrl: 'ftp://this.is/not-a-webpage/now/is/it?',
           doneUrl: reg + '/invalid-done/-/v1/login'
         })
 
@@ -418,7 +418,7 @@ t.test('fail at login step by having an invalid url', t => {
     method: 'POST',
     uri: reg + '/invalid-login-url/-/v1/login',
     body: {
-      loginUrl: 'this is not a url',
+      loginUrl: 'ftp://this.is/not-a-webpage/now/is/it?',
       doneUrl: reg + '/invalid-done/-/v1/login'
     },
     message: 'Invalid response from web login endpoint'
