@@ -4,7 +4,7 @@ Provides functions for fetching and updating an npmjs.com profile.
 
 ```js
 const profile = require('npm-profile')
-const result = await profile.get(registry, {token})
+const result = await profile.get({token})
 //...
 ```
 
