@@ -25,7 +25,7 @@ test('get', t => {
       t.deepEqual(auth, ['Bearer deadbeef'], 'got auth header')
       return [auth ? 200 : 401, { auth: 'bearer' }, {}]
     })
-    return profile.get({ token: 'deadbeef' })
+    return profile.get({ '//registry.npmjs.org/:_authToken': 'deadbeef' })
   }).then(result => {
     t.like(result, { auth: 'bearer' })
   }).then(() => {
@@ -40,10 +40,10 @@ test('get', t => {
       return [auth ? 200 : 401, { auth: 'basic' }, {}]
     })
     return profile.get({
-      username: 'abc',
+      '//registry.npmjs.org/:username': 'abc',
       // Passwords are stored in base64 form and npm-related consumers expect
       // them in this format. Changing this for npm would be a bigger change.
-      password: Buffer.from('123', 'utf8').toString('base64')
+      '//registry.npmjs.org/:_password': Buffer.from('123', 'utf8').toString('base64')
     })
   }).then(result => {
     t.like(result, { auth: 'basic' })
@@ -55,7 +55,10 @@ test('get', t => {
       t.deepequal(otp, ['1234'], 'got otp token')
       return [auth ? 200 : 401, { auth: 'bearer', otp: !!otp }, {}]
     })
-    return profile.get({ otp: '1234', token: 'deadbeef' })
+    return profile.get({
+      otp: '1234',
+      '//registry.npmjs.org/:_authToken': 'deadbeef'
+    })
   }).then(result => {
     t.like(result, { auth: 'bearer', otp: true })
   })
