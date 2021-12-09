@@ -11,7 +11,9 @@ const reg = 'http://localhost:' + PORT
 const requests = []
 
 t.beforeEach(async () => {
-  if (this.parent === t) { requests.push(this.name) }
+  if (this.parent === t) {
+    requests.push(this.name)
+  }
 })
 
 let retryTimer = null
@@ -27,7 +29,9 @@ const server = http.createServer((q, s) => {
     requests.push(reqLog)
   }
   let body = ''
-  q.on('data', c => { body += c })
+  q.on('data', c => {
+    body += c
+  })
   q.on('end', () => {
     try {
       body = JSON.parse(body)
@@ -39,7 +43,7 @@ const server = http.createServer((q, s) => {
       case '/weblogin/-/v1/login':
         return respond(s, 200, {
           loginUrl: 'http://example.com/blerg',
-          doneUrl: reg + '/weblogin/-/v1/login/blerg'
+          doneUrl: reg + '/weblogin/-/v1/login/blerg',
         })
 
       case '/weblogin/-/v1/login/blerg':
@@ -64,7 +68,7 @@ const server = http.createServer((q, s) => {
           name: 'exists',
           _rev: 'goodbloodmoon',
           roles: ['yabba', 'dabba', 'doo'],
-          email: 'i@izs.me'
+          email: 'i@izs.me',
         })
 
       case '/couchdb/-/user/org.couchdb.user:exists/-rev/goodbloodmoon':
@@ -78,7 +82,7 @@ const server = http.createServer((q, s) => {
         } else {
           return respond(s, 403, {
             error: 'what are you even doing?',
-            sentBody: body
+            sentBody: body,
           })
         }
 
@@ -90,7 +94,7 @@ const server = http.createServer((q, s) => {
       case '/notoken/-/v1/login':
         return respond(s, 200, {
           loginUrl: 'http://example.com/blerg',
-          doneUrl: reg + '/notoken/-/v1/login/blerg'
+          doneUrl: reg + '/notoken/-/v1/login/blerg',
         })
       case '/notoken/-/v1/login/blerg':
         return respond(s, 200, { oh: 'no' })
@@ -98,7 +102,7 @@ const server = http.createServer((q, s) => {
       case '/retry-after/-/v1/login':
         return respond(s, 200, {
           loginUrl: 'http://www.example.com/blerg',
-          doneUrl: reg + '/retry-after/-/v1/login/blerg'
+          doneUrl: reg + '/retry-after/-/v1/login/blerg',
         })
 
       case '/retry-after/-/v1/login/blerg':
@@ -118,7 +122,7 @@ const server = http.createServer((q, s) => {
       case '/retry-again/-/v1/login':
         return respond(s, 200, {
           loginUrl: 'http://www.example.com/blerg',
-          doneUrl: reg + '/retry-again/-/v1/login/blerg'
+          doneUrl: reg + '/retry-again/-/v1/login/blerg',
         })
 
       case '/retry-again/-/v1/login/blerg':
@@ -137,13 +141,13 @@ const server = http.createServer((q, s) => {
       case '/invalid-login-url/-/v1/login':
         return respond(s, 200, {
           loginUrl: 'ftp://this.is/not-a-webpage/now/is/it?',
-          doneUrl: reg + '/invalid-done/-/v1/login'
+          doneUrl: reg + '/invalid-done/-/v1/login',
         })
 
       case '/invalid-done/-/v1/login':
         return respond(s, 200, {
           loginUrl: 'http://www.example.com/blerg',
-          doneUrl: reg + '/invalid-done/-/v1/login/blerg'
+          doneUrl: reg + '/invalid-done/-/v1/login/blerg',
         })
       case '/invalid-done/-/v1/login/blerg':
         return respond(s, 299, { salt: 'im helping' })
@@ -171,7 +175,7 @@ t.test('login web', t => {
   })
 
   t.resolveMatch(profile.loginWeb(opener, {
-    registry: reg + '/weblogin/'
+    registry: reg + '/weblogin/',
   }), { token: 'blerg' })
 
   return t.test('called opener', t => {
@@ -190,7 +194,7 @@ t.test('adduser web', t => {
 
   t.resolveMatch(profile.adduserWeb(opener, {
     registry: reg + '/weblogin/',
-    opts: {}
+    opts: {},
   }), { token: 'blerg' })
 
   return t.test('called opener', t => {
@@ -208,10 +212,12 @@ t.test('login web by default', t => {
     resolve()
   })
 
-  const prompter = () => { throw new Error('should not do this') }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
 
   t.resolveMatch(profile.login(opener, prompter, {
-    registry: reg + '/weblogin/'
+    registry: reg + '/weblogin/',
   }), { token: 'blerg' })
 
   return t.test('called opener', t => {
@@ -229,7 +235,7 @@ t.test('adduser web', t => {
   })
 
   t.resolveMatch(profile.adduserWeb(opener, {
-    registry: reg + '/weblogin/'
+    registry: reg + '/weblogin/',
   }), { token: 'blerg' })
 
   return t.test('called opener', t => {
@@ -247,10 +253,12 @@ t.test('adduser web by default', t => {
     resolve()
   })
 
-  const prompter = () => { throw new Error('should not do this') }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
 
   t.resolveMatch(profile.adduser(opener, prompter, {
-    registry: reg + '/weblogin/'
+    registry: reg + '/weblogin/',
   }), { token: 'blerg' })
 
   return t.test('called opener', t => {
@@ -272,7 +280,7 @@ t.test('login couch', t => {
     code: 'E400',
     statusCode: 400,
     method: 'PUT',
-    message: 'There is no user with the username "nemo"'
+    message: 'There is no user with the username "nemo"',
   }
   t.test('unknown user', t =>
     profile.loginCouch('nemo', 'pass', { registry })
@@ -283,7 +291,7 @@ t.test('login couch', t => {
 
 t.test('adduser couch', t => {
   return t.resolveMatch(profile.adduserCouch('user', 'i@izs.me', 'pass', {
-    registry: reg + '/couchdb/'
+    registry: reg + '/couchdb/',
   }), { token: 'blerg' })
 })
 
@@ -300,13 +308,13 @@ t.test('login fallback to couch', t => {
       resolve({
         username: 'user',
         password: 'pass',
-        email: 'i@izs.me'
+        email: 'i@izs.me',
       })
     })
   }
 
   t.resolveMatch(profile.login(opener, prompter, {
-    registry: reg + '/couchdb/'
+    registry: reg + '/couchdb/',
   }), { token: 'blerg' })
 
   return t.test('called prompter', t => {
@@ -328,13 +336,13 @@ t.test('adduser fallback to couch', t => {
       resolve({
         username: 'user',
         password: 'pass',
-        email: 'i@izs.me'
+        email: 'i@izs.me',
       })
     })
   }
 
   t.resolveMatch(profile.adduser(opener, prompter, {
-    registry: reg + '/couchdb/'
+    registry: reg + '/couchdb/',
   }), { token: 'blerg' })
 
   return t.test('called prompter', t => {
@@ -344,11 +352,13 @@ t.test('adduser fallback to couch', t => {
 })
 
 t.test('501s', t => {
-  const opener = () => { throw new Error('poop') }
+  const opener = () => {
+    throw new Error('poop')
+  }
   const prompter = () => new Promise(resolve => resolve({
     username: 'user',
     password: 'pass',
-    email: 'i@izs.me'
+    email: 'i@izs.me',
   }))
 
   const registry = reg + '/501/'
@@ -358,8 +368,8 @@ t.test('501s', t => {
   const expectErr = {
     code: 'E501',
     body: {
-      pwn: 'witaf idk lol'
-    }
+      pwn: 'witaf idk lol',
+    },
   }
 
   t.test('login', t =>
@@ -390,7 +400,9 @@ t.test('501s', t => {
 t.test('fail at login step', t => {
   const registry = reg + '/invalid-login/'
   const opener = (url, conf) => new Promise(resolve => resolve())
-  const prompter = () => { throw new Error('should not do this') }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
   t.plan(1)
   const expectedErr = {
     statusCode: 200,
@@ -398,9 +410,9 @@ t.test('fail at login step', t => {
     method: 'POST',
     uri: reg + '/invalid-login/-/v1/login',
     body: {
-      salt: 'im helping'
+      salt: 'im helping',
     },
-    message: 'Invalid response from web login endpoint'
+    message: 'Invalid response from web login endpoint',
   }
   profile.login(opener, prompter, { registry })
     .catch(er => t.match(er, expectedErr))
@@ -409,7 +421,9 @@ t.test('fail at login step', t => {
 t.test('fail at login step by having an invalid url', t => {
   const registry = reg + '/invalid-login-url/'
   const opener = (url, conf) => new Promise(resolve => resolve())
-  const prompter = () => { throw new Error('should not do this') }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
   t.plan(1)
   const expectedErr = {
     statusCode: 200,
@@ -418,9 +432,9 @@ t.test('fail at login step by having an invalid url', t => {
     uri: reg + '/invalid-login-url/-/v1/login',
     body: {
       loginUrl: 'ftp://this.is/not-a-webpage/now/is/it?',
-      doneUrl: reg + '/invalid-done/-/v1/login'
+      doneUrl: reg + '/invalid-done/-/v1/login',
     },
-    message: 'Invalid response from web login endpoint'
+    message: 'Invalid response from web login endpoint',
   }
   profile.login(opener, prompter, { registry })
     .catch(er => t.match(er, expectedErr))
@@ -429,7 +443,9 @@ t.test('fail at login step by having an invalid url', t => {
 t.test('fail at the done step', t => {
   const registry = reg + '/invalid-done/'
   const opener = (url, conf) => new Promise(resolve => resolve())
-  const prompter = () => { throw new Error('should not do this') }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
   t.plan(1)
   const expectedErr = {
     statusCode: 299,
@@ -437,9 +453,9 @@ t.test('fail at the done step', t => {
     method: 'GET',
     uri: reg + '/invalid-done/-/v1/login/blerg',
     body: {
-      salt: 'im helping'
+      salt: 'im helping',
     },
-    message: 'Invalid response from web login endpoint'
+    message: 'Invalid response from web login endpoint',
   }
   profile.login(opener, prompter, { registry })
     .catch(er => t.match(er, expectedErr))
@@ -449,7 +465,9 @@ t.test('notoken response from login endpoint (status 200, bad data)', t => {
   const registry = reg + '/notoken/'
 
   const opener = (url, conf) => new Promise(resolve => resolve())
-  const prompter = () => { throw new Error('should not do this') }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
 
   const expectedErr = {
     code: 'E200',
@@ -457,9 +475,9 @@ t.test('notoken response from login endpoint (status 200, bad data)', t => {
     method: 'GET',
     uri: registry + '-/v1/login/blerg',
     body: {
-      oh: 'no'
+      oh: 'no',
     },
-    message: 'Invalid response from web login endpoint'
+    message: 'Invalid response from web login endpoint',
   }
 
   t.test('loginWeb', t =>
@@ -477,7 +495,9 @@ t.test('retry-after 202 response', t => {
   const registry = reg + '/retry-after/'
 
   const opener = (url, conf) => new Promise(resolve => resolve())
-  const prompter = () => { throw new Error('should not do this') }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
 
   const expect = { token: 'blerg' }
 
@@ -492,7 +512,9 @@ t.test('no retry-after 202 response', t => {
   const registry = reg + '/retry-again/'
 
   const opener = (url, conf) => new Promise(resolve => resolve())
-  const prompter = () => { throw new Error('should not do this') }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
 
   const expect = { token: 'blerg' }
 
