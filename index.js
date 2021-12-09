@@ -1,7 +1,7 @@
 'use strict'
 
 const fetch = require('npm-registry-fetch')
-const { HttpErrorBase } = require('npm-registry-fetch/errors.js')
+const { HttpErrorBase } = require('npm-registry-fetch/lib/errors.js')
 const os = require('os')
 const { URL } = require('url')
 
