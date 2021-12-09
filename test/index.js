@@ -43,7 +43,7 @@ test('get', t => {
       '//registry.npmjs.org/:username': 'abc',
       // Passwords are stored in base64 form and npm-related consumers expect
       // them in this format. Changing this for npm would be a bigger change.
-      '//registry.npmjs.org/:_password': Buffer.from('123', 'utf8').toString('base64')
+      '//registry.npmjs.org/:_password': Buffer.from('123', 'utf8').toString('base64'),
     })
   }).then(result => {
     t.match(result, { auth: 'basic' })
@@ -57,7 +57,7 @@ test('get', t => {
     })
     return profile.get({
       otp: '1234',
-      '//registry.npmjs.org/:_authToken': 'deadbeef'
+      '//registry.npmjs.org/:_authToken': 'deadbeef',
     })
   }).then(result => {
     t.match(result, { auth: 'bearer', otp: true })
@@ -70,11 +70,11 @@ test('set', t => {
   const prof = { user: 'zkat', github: 'zkat' }
   tnock(t, registry).post('/-/npm/v1/user', {
     github: 'zkat',
-    email: null
+    email: null,
   }).reply(200, prof)
   return profile.set({
     github: 'zkat',
-    email: ''
+    email: '',
   }).then(json => {
     t.same(json, prof, 'got the profile data in return')
   })
@@ -83,12 +83,12 @@ test('set', t => {
 test('listTokens', t => {
   const tokens = [
     { key: 'sha512-hahaha', token: 'blah' },
-    { key: 'sha512-meh', token: 'bleh' }
+    { key: 'sha512-meh', token: 'bleh' },
   ]
   tnock(t, registry).get('/-/npm/v1/tokens').reply(200, {
     objects: tokens,
     total: 2,
-    urls: {}
+    urls: {},
   })
   return profile.listTokens().then(tok => t.same(tok, tokens))
 })
@@ -97,11 +97,11 @@ test('loginCouch happy path', t => {
   tnock(t, registry)
     .put('/-/user/org.couchdb.user:blerp')
     .reply(201, {
-      ok: true
+      ok: true,
     })
   return t.resolveMatch(profile.loginCouch('blerp', 'password'), {
     ok: true,
-    username: 'blerp'
+    username: 'blerp',
   })
 })
 
@@ -109,7 +109,7 @@ test('login fallback to couch', t => {
   tnock(t, registry)
     .put('/-/user/org.couchdb.user:blerp')
     .reply(201, {
-      ok: true
+      ok: true,
     })
     .post('/-/v1/login')
     .reply(404, { error: 'not found' })
@@ -121,7 +121,7 @@ test('login fallback to couch', t => {
   })
   return t.resolveMatch(profile.login(opener, prompter), {
     ok: true,
-    username: 'blerp'
+    username: 'blerp',
   })
 })
 
@@ -129,11 +129,11 @@ test('adduserCouch happy path', t => {
   tnock(t, registry)
     .put('/-/user/org.couchdb.user:blerp')
     .reply(201, {
-      ok: true
+      ok: true,
     })
   return t.resolveMatch(profile.adduserCouch('blerp', 'password'), {
     ok: true,
-    username: 'blerp'
+    username: 'blerp',
   })
 })
 
@@ -141,7 +141,7 @@ test('adduser fallback to couch', t => {
   tnock(t, registry)
     .put('/-/user/org.couchdb.user:blerp')
     .reply(201, {
-      ok: true
+      ok: true,
     })
     .post('/-/v1/login')
     .reply(404, { error: 'not found' })
@@ -153,7 +153,7 @@ test('adduser fallback to couch', t => {
   })
   return t.resolveMatch(profile.adduser(opener, prompter), {
     ok: true,
-    username: 'blerp'
+    username: 'blerp',
   })
 })
 
@@ -161,11 +161,11 @@ test('adduserCouch happy path', t => {
   tnock(t, registry)
     .put('/-/user/org.couchdb.user:blerp')
     .reply(201, {
-      ok: true
+      ok: true,
     })
   return t.resolveMatch(profile.adduserCouch('blerp', 'password'), {
     ok: true,
-    username: 'blerp'
+    username: 'blerp',
   })
 })
 
@@ -175,7 +175,7 @@ test('adduserWeb fail, just testing default opts setting', t => {
     .reply(404, { error: 'not found' })
   const opener = url => t.fail('called opener', { url })
   return t.rejects(profile.adduserWeb(opener), {
-    message: 'Web login not supported'
+    message: 'Web login not supported',
   })
 })
 
@@ -185,42 +185,41 @@ test('loginWeb fail, just testing default opts setting', t => {
     .reply(404, { error: 'not found' })
   const opener = url => t.fail('called opener', { url })
   return t.rejects(profile.loginWeb(opener), {
-    message: 'Web login not supported'
+    message: 'Web login not supported',
   })
 })
-
 
 test('listTokens multipage', t => {
   const tokens1 = [
     { key: 'sha512-hahaha', token: 'blah' },
-    { key: 'sha512-meh', token: 'bleh' }
+    { key: 'sha512-meh', token: 'bleh' },
   ]
   const tokens2 = [
     { key: 'sha512-ugh', token: 'blih' },
-    { key: 'sha512-ohno', token: 'bloh' }
+    { key: 'sha512-ohno', token: 'bloh' },
   ]
   const tokens3 = [
-    { key: 'sha512-stahp', token: 'bluh' }
+    { key: 'sha512-stahp', token: 'bluh' },
   ]
   const srv = tnock(t, registry)
   srv.get('/-/npm/v1/tokens').reply(200, {
     objects: tokens1,
     total: 2,
     urls: {
-      next: '/idk/some/other/one'
-    }
+      next: '/idk/some/other/one',
+    },
   })
   srv.get('/idk/some/other/one').reply(200, {
     objects: tokens2,
     total: 2,
     urls: {
-      next: '/-/npm/last/one-i-swear'
-    }
+      next: '/-/npm/last/one-i-swear',
+    },
   })
   srv.get('/-/npm/last/one-i-swear').reply(200, {
     objects: tokens3,
     total: 1,
-    urls: {}
+    urls: {},
   })
   return profile.listTokens().then(tok => {
     t.same(
@@ -242,12 +241,12 @@ test('createToken', t => {
   const base = {
     password: 'secretPassw0rd!',
     readonly: true,
-    cidr_whitelist: ['8.8.8.8/32', '127.0.0.1', '192.168.1.1']
+    cidr_whitelist: ['8.8.8.8/32', '127.0.0.1', '192.168.1.1'],
   }
   const obj = Object.assign({
     token: 'deadbeef',
     key: 'sha512-badc0ffee',
-    created: (new Date()).toString()
+    created: (new Date()).toString(),
   })
   delete obj.password
   tnock(t, registry).post('/-/npm/v1/tokens', base).reply(200, obj)
