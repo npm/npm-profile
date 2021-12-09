@@ -1,5 +1,5 @@
 const t = require('tap')
-const profile = require('../index.js')
+const profile = require('..')
 const http = require('http')
 const PORT = +process.env.PORT || 13445
 

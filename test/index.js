@@ -3,7 +3,7 @@
 const test = require('tap').test
 const tnock = require('./fixtures/tnock.js')
 
-const profile = require('../index.js')
+const profile = require('..')
 
 const registry = 'https://registry.npmjs.org/'
 
