@@ -6,7 +6,7 @@
   "author": "GitHub Inc.",
   "license": "ISC",
   "dependencies": {
-    "npm-registry-fetch": "^11.0.0"
+    "npm-registry-fetch": "^12.0.0"
   },
   "main": "./lib/index.js",
   "repository": {
