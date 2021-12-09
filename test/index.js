@@ -18,16 +18,16 @@ test('get', t => {
   return profile.get().then(result => {
     t.fail('GET w/o auth should fail')
   }, err => {
-    t.is(err.code, 'E401', 'auth errors are passed through')
+    t.equal(err.code, 'E401', 'auth errors are passed through')
   }).then(() => {
     srv.get(getUrl).reply(function () {
       const auth = this.req.headers.authorization
-      t.deepEqual(auth, ['Bearer deadbeef'], 'got auth header')
+      t.same(auth, ['Bearer deadbeef'], 'got auth header')
       return [auth ? 200 : 401, { auth: 'bearer' }, {}]
     })
     return profile.get({ '//registry.npmjs.org/:_authToken': 'deadbeef' })
   }).then(result => {
-    t.like(result, { auth: 'bearer' })
+    t.match(result, { auth: 'bearer' })
   }).then(() => {
     srv.get(getUrl).reply(function () {
       const auth = this.req.headers.authorization
@@ -46,13 +46,13 @@ test('get', t => {
       '//registry.npmjs.org/:_password': Buffer.from('123', 'utf8').toString('base64')
     })
   }).then(result => {
-    t.like(result, { auth: 'basic' })
+    t.match(result, { auth: 'basic' })
   }).then(() => {
     srv.get(getUrl).reply(function () {
       const auth = this.req.headers.authorization
       const otp = this.req.headers['npm-otp']
-      t.deepEqual(auth, ['Bearer deadbeef'], 'got auth header')
-      t.deepequal(otp, ['1234'], 'got otp token')
+      t.same(auth, ['Bearer deadbeef'], 'got auth header')
+      t.same(otp, ['1234'], 'got otp token')
       return [auth ? 200 : 401, { auth: 'bearer', otp: !!otp }, {}]
     })
     return profile.get({
@@ -60,7 +60,7 @@ test('get', t => {
       '//registry.npmjs.org/:_authToken': 'deadbeef'
     })
   }).then(result => {
-    t.like(result, { auth: 'bearer', otp: true })
+    t.match(result, { auth: 'bearer', otp: true })
   })
   // with otp, with token, with basic
   // prob should make w/o token 401
@@ -76,7 +76,7 @@ test('set', t => {
     github: 'zkat',
     email: ''
   }).then(json => {
-    t.deepEqual(json, prof, 'got the profile data in return')
+    t.same(json, prof, 'got the profile data in return')
   })
 })
 
@@ -90,7 +90,7 @@ test('listTokens', t => {
     total: 2,
     urls: {}
   })
-  return profile.listTokens().then(tok => t.deepEqual(tok, tokens))
+  return profile.listTokens().then(tok => t.same(tok, tokens))
 })
 
 test('loginCouch happy path', t => {
@@ -223,7 +223,7 @@ test('listTokens multipage', t => {
     urls: {}
   })
   return profile.listTokens().then(tok => {
-    t.deepEqual(
+    t.same(
       tok,
       tokens1.concat(tokens2).concat(tokens3),
       'supports multi-URL token requests and concats them'
@@ -255,5 +255,5 @@ test('createToken', t => {
     base.password,
     base.readonly,
     base.cidr_whitelist
-  ).then(ret => t.deepEqual(ret, obj, 'got the right return value'))
+  ).then(ret => t.same(ret, obj, 'got the right return value'))
 })
