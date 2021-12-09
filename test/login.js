@@ -10,9 +10,8 @@ const reg = 'http://localhost:' + PORT
 // track requests made so that any change is noticed
 const requests = []
 
-t.beforeEach(function (cb) {
+t.beforeEach(async () => {
   if (this.parent === t) { requests.push(this.name) }
-  cb()
 })
 
 let retryTimer = null
@@ -177,7 +176,7 @@ t.test('login web', t => {
 
   return t.test('called opener', t => {
     t.equal(calledOpener, true)
-    t.done()
+    t.end()
   })
 })
 
@@ -196,7 +195,7 @@ t.test('adduser web', t => {
 
   return t.test('called opener', t => {
     t.equal(calledOpener, true)
-    t.done()
+    t.end()
   })
 })
 
@@ -217,7 +216,7 @@ t.test('login web by default', t => {
 
   return t.test('called opener', t => {
     t.equal(calledOpener, true)
-    t.done()
+    t.end()
   })
 })
 
@@ -235,7 +234,7 @@ t.test('adduser web', t => {
 
   return t.test('called opener', t => {
     t.equal(calledOpener, true)
-    t.done()
+    t.end()
   })
 })
 
@@ -256,7 +255,7 @@ t.test('adduser web by default', t => {
 
   return t.test('called opener', t => {
     t.equal(calledOpener, true)
-    t.done()
+    t.end()
   })
 })
 
@@ -312,7 +311,7 @@ t.test('login fallback to couch', t => {
 
   return t.test('called prompter', t => {
     t.equal(calledPrompter, true)
-    t.done()
+    t.end()
   })
 })
 
@@ -340,7 +339,7 @@ t.test('adduser fallback to couch', t => {
 
   return t.test('called prompter', t => {
     t.equal(calledPrompter, true)
-    t.done()
+    t.end()
   })
 })
 
