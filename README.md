@@ -526,14 +526,15 @@ Of particular note are `opts.registry`, and the auth-related options:
 
 ## <a name="logging"></a> Logging
 
-This modules logs by emitting `log` events on the global `process` object.
+This modules logs by emitting `log` events on the global `process` object
+via [`proc-log`](https://www.npmjs.com/package/proc-log).
 These events look like this:
 
 ```js
-process.emit('log', 'loglevel', 'feature', 'message part 1', 'part 2', 'part 3', 'etc')
+procLog[loglevel]('feature', 'message part 1', 'part 2', 'part 3', 'etc')
 ```
 
-`loglevel` can be one of: `error`, `warn`, `notice`, `http`, `timing`, `info`, `verbose`, and `silly`.
+`loglevel` can be one of: `error`, `warn`, `notice`, `http`, `info`, `verbose`, and `silly`.
 
 `feature` is any brief string that describes the component doing the logging.
 
@@ -542,14 +543,13 @@ The remaining arguments are evaluated like `console.log` and joined together wit
 A real world example of this is:
 
 ```js
-  process.emit('log', 'http', 'request', '→', conf.method || 'GET', conf.target)
+  procLog.http('request', '→', conf.method || 'GET', conf.target)
 ```
 
 To handle the log events, you would do something like this:
 
 ```js
-const log = require('npmlog')
-process.on('log', function (level) {
-  return log[level].apply(log, [].slice.call(arguments, 1))
+process.on('log', (level, feature, ...args) => {
+  console.log(level, feature, ...args)
 })
 ```

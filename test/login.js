@@ -3,8 +3,6 @@ const profile = require('..')
 const http = require('http')
 const PORT = +process.env.PORT || 13445
 
-// process.on('log', console.error)
-
 const reg = 'http://localhost:' + PORT
 
 // track requests made so that any change is noticed
@@ -38,7 +36,6 @@ const server = http.createServer((q, s) => {
     } catch (er) {
       body = undefined
     }
-    process.emit('log', '%j\n%j\n%j', q.url, q.headers, body)
     switch (q.url) {
       case '/weblogin/-/v1/login':
         return respond(s, 200, {
@@ -170,7 +167,6 @@ t.test('login web', t => {
   let calledOpener = false
   const opener = (url, conf) => new Promise(resolve => {
     calledOpener = true
-    process.emit('log', 'in opener', url, conf)
     resolve()
   })
 
@@ -188,7 +184,6 @@ t.test('adduser web', t => {
   let calledOpener = false
   const opener = (url, conf) => new Promise(resolve => {
     calledOpener = true
-    process.emit('log', 'in opener', url, conf)
     resolve()
   })
 
@@ -208,7 +203,6 @@ t.test('login web by default', t => {
 
   const opener = (url, conf) => new Promise(resolve => {
     calledOpener = true
-    process.emit('log', 'in opener', url, conf)
     resolve()
   })
 
@@ -230,7 +224,6 @@ t.test('adduser web', t => {
   let calledOpener = false
   const opener = (url, conf) => new Promise(resolve => {
     calledOpener = true
-    process.emit('log', 'in opener', url, conf)
     resolve()
   })
 
@@ -249,7 +242,6 @@ t.test('adduser web by default', t => {
 
   const opener = (url, conf) => new Promise(resolve => {
     calledOpener = true
-    process.emit('log', 'in opener', url, conf)
     resolve()
   })
 
