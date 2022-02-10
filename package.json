@@ -20,7 +20,7 @@
   ],
   "devDependencies": {
     "@npmcli/template-oss": "^2.7.1",
-    "nock": "^13.2.1",
+    "nock": "^13.2.4",
     "tap": "^15.1.6"
   },
   "scripts": {
