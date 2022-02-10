@@ -31,7 +31,8 @@
     "snap": "tap",
     "lint": "eslint '**/*.js'",
     "postlint": "npm-template-check",
-    "lintfix": "npm run lint -- --fix"
+    "lintfix": "npm run lint -- --fix",
+    "template-copy": "npm-template-copy --force"
   },
   "tap": {
     "check-coverage": true
@@ -40,6 +41,6 @@
     "node": "^12.13.0 || ^14.15.0 || >=16"
   },
   "templateOSS": {
-    "version": "2.5.1"
+    "version": "2.7.1"
   }
 }
