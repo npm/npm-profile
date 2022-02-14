@@ -1,5 +1,18 @@
 # Changelog
 
+### [6.0.1](https://www.github.com/npm/npm-profile/compare/v6.0.0...v6.0.1) (2022-02-14)
+
+
+### Bug Fixes
+
+* Modify logincouch target ([#27](https://www.github.com/npm/npm-profile/issues/27)) ([1889375](https://www.github.com/npm/npm-profile/commit/1889375c240f85fbb2d38b72c2dda7e5a73bf9f0))
+
+
+### Dependencies
+
+* update npm-registry-fetch requirement from ^12.0.0 to ^12.0.2 ([82b65f8](https://www.github.com/npm/npm-profile/commit/82b65f8fef07497c116a64f141e275c173cb8cf1))
+* use proc-log instead of process.emit ([fe2b8f3](https://www.github.com/npm/npm-profile/commit/fe2b8f3988578661d688415feb4c37dd1aa8b82d))
+
 ## [6.0.0](https://www.github.com/npm/npm-profile/compare/v5.0.4...v6.0.0) (2022-01-19)
 
 
