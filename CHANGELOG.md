@@ -1,5 +1,12 @@
 # Changelog
 
+### [6.0.3](https://github.com/npm/npm-profile/compare/v6.0.2...v6.0.3) (2022-04-20)
+
+
+### Dependencies
+
+* update npm-registry-fetch requirement from ^13.0.0 to ^13.0.1 ([#34](https://github.com/npm/npm-profile/issues/34)) ([a444b51](https://github.com/npm/npm-profile/commit/a444b5149653e7cfba2cdbcd8e31bb12d97bc152))
+
 ### [6.0.2](https://www.github.com/npm/npm-profile/compare/v6.0.1...v6.0.2) (2022-02-15)
 
 
