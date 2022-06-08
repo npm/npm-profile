@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.1.0](https://github.com/npm/npm-profile/compare/v6.0.3...v6.1.0) (2022-06-08)
+
+
+### Features
+
+* Allow web-login donecheck to cancel opener promise ([#50](https://github.com/npm/npm-profile/issues/50)) ([aa82de0](https://github.com/npm/npm-profile/commit/aa82de07a3c2e5adf90c79d6401dba7b9705da27))
+* set 'npm-use-webauthn' header depending on option ([#48](https://github.com/npm/npm-profile/issues/48)) ([6bdd233](https://github.com/npm/npm-profile/commit/6bdd2331b988d981be58953b28ec93a2c3412b58))
+
 ### [6.0.3](https://github.com/npm/npm-profile/compare/v6.0.2...v6.0.3) (2022-04-20)
 
 
