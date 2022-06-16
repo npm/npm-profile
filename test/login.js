@@ -44,6 +44,9 @@ const server = http.createServer((q, s) => {
         })
 
       case '/weblogin/-/v1/login/blerg':
+        if (!q.headers['npm-hostname']) {
+          return respond(s, 500, { error: 'missing npm-hostname header' })
+        }
         return respond(s, 200, { token: 'blerg' })
 
       case '/couchdb/-/user/org.couchdb.user:user':
