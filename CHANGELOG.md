@@ -1,5 +1,12 @@
 # Changelog
 
+## [6.2.0](https://github.com/npm/npm-profile/compare/v6.1.0...v6.2.0) (2022-07-12)
+
+
+### Features
+
+* Add export for `webauthCheckLogin` ([#54](https://github.com/npm/npm-profile/issues/54)) ([05a7811](https://github.com/npm/npm-profile/commit/05a78112a4a5c473813cb1f26be346452687899b))
+
 ## [6.1.0](https://github.com/npm/npm-profile/compare/v6.0.3...v6.1.0) (2022-06-08)
 
 
