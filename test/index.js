@@ -16,7 +16,7 @@ test('get', t => {
     return [auth ? 200 : 401, '', {}]
   })
   return profile.get().then(result => {
-    t.fail('GET w/o auth should fail')
+    return t.fail('GET w/o auth should fail')
   }, err => {
     t.equal(err.code, 'E401', 'auth errors are passed through')
   }).then(() => {
@@ -27,7 +27,7 @@ test('get', t => {
     })
     return profile.get({ '//registry.npmjs.org/:_authToken': 'deadbeef' })
   }).then(result => {
-    t.match(result, { auth: 'bearer' })
+    return t.match(result, { auth: 'bearer' })
   }).then(() => {
     srv.get(getUrl).reply(function () {
       const auth = this.req.headers.authorization
@@ -46,7 +46,7 @@ test('get', t => {
       '//registry.npmjs.org/:_password': Buffer.from('123', 'utf8').toString('base64'),
     })
   }).then(result => {
-    t.match(result, { auth: 'basic' })
+    return t.match(result, { auth: 'basic' })
   }).then(() => {
     srv.get(getUrl).reply(function () {
       const auth = this.req.headers.authorization
@@ -60,7 +60,7 @@ test('get', t => {
       '//registry.npmjs.org/:_authToken': 'deadbeef',
     })
   }).then(result => {
-    t.match(result, { auth: 'bearer', otp: true })
+    return t.match(result, { auth: 'bearer', otp: true })
   })
   // with otp, with token, with basic
   // prob should make w/o token 401
@@ -76,7 +76,7 @@ test('set', t => {
     github: 'zkat',
     email: '',
   }).then(json => {
-    t.same(json, prof, 'got the profile data in return')
+    return t.same(json, prof, 'got the profile data in return')
   })
 })
 
@@ -258,7 +258,7 @@ test('listTokens multipage', t => {
     urls: {},
   })
   return profile.listTokens().then(tok => {
-    t.same(
+    return t.same(
       tok,
       tokens1.concat(tokens2).concat(tokens3),
       'supports multi-URL token requests and concats them'
@@ -269,7 +269,7 @@ test('listTokens multipage', t => {
 test('removeToken', t => {
   tnock(t, registry).delete('/-/npm/v1/tokens/token/deadbeef').reply(200)
   return profile.removeToken('deadbeef').then(ret => {
-    t.equal(ret, null, 'null return value on success')
+    return t.equal(ret, null, 'null return value on success')
   })
 })
 
