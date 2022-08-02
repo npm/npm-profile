@@ -1,5 +1,13 @@
 # Changelog
 
+## [6.2.1](https://github.com/npm/npm-profile/compare/v6.2.0...v6.2.1) (2022-08-02)
+
+
+### Bug Fixes
+
+* cancel opener promise if web login fails ([#57](https://github.com/npm/npm-profile/issues/57)) ([cdc4acb](https://github.com/npm/npm-profile/commit/cdc4acb81d28924bdc8f5503f2eb2515884b6478))
+* remove `npm-use-webauthn` header ([#53](https://github.com/npm/npm-profile/issues/53)) ([b701df2](https://github.com/npm/npm-profile/commit/b701df2630c12de0db555138238eb24a026a438b))
+
 ## [6.2.0](https://github.com/npm/npm-profile/compare/v6.1.0...v6.2.0) (2022-07-12)
 
 
