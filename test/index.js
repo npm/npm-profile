@@ -125,6 +125,42 @@ test('login fallback to couch', t => {
   })
 })
 
+test('login fallback to couch when web login fails cancels opener promise', t => {
+  const loginUrl = 'https://www.npmjs.com/login?next=/login/cli/123'
+  tnock(t, registry)
+    .put('/-/user/org.couchdb.user:blerp')
+    .reply(201, {
+      ok: true,
+    })
+    .post('/-/v1/login')
+    .reply(200, {
+      loginUrl,
+      doneUrl: 'https://registry.npmjs.org:443/-/v1/done?sessionId=123',
+    })
+    .get('/-/v1/done?sessionId=123')
+    .reply(404, { error: 'Not found' })
+
+  let cancelled = false
+  const opener = (url, doneEmitter) => {
+    t.equal(url, loginUrl)
+    doneEmitter.on('abort', () => {
+      cancelled = true
+    })
+  }
+
+  const prompter = creds => Promise.resolve({
+    username: 'blerp',
+    password: 'prelb',
+    email: 'blerp@blerp.blerp',
+  })
+  return t.resolveMatch(profile.login(opener, prompter), {
+    ok: true,
+    username: 'blerp',
+  }).then(() => {
+    return t.equal(cancelled, true)
+  })
+})
+
 test('adduserCouch happy path', t => {
   tnock(t, registry)
     .put('/-/user/org.couchdb.user:blerp')
