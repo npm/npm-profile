@@ -1,5 +1,15 @@
 # Changelog
 
+## [7.0.0](https://github.com/npm/npm-profile/compare/v6.2.1...v7.0.0) (2022-09-30)
+
+### ⚠️ BREAKING CHANGES
+
+* `npm-profile` is now compatible with the following semver range for node: `^14.17.0 || ^16.13.0 || >=18.0.0`
+
+### Features
+
+* [`e16befb`](https://github.com/npm/npm-profile/commit/e16befb96a182525432f4023952033f759f8c814) [#68](https://github.com/npm/npm-profile/pull/68) postinstall for dependabot template-oss PR (@lukekarrys)
+
 ## [6.2.1](https://github.com/npm/npm-profile/compare/v6.2.0...v6.2.1) (2022-08-02)
 
 
