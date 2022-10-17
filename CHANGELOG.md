@@ -1,5 +1,12 @@
 # Changelog
 
+## [7.0.1](https://github.com/npm/npm-profile/compare/v7.0.0...v7.0.1) (2022-10-17)
+
+### Dependencies
+
+* [`36fa4b1`](https://github.com/npm/npm-profile/commit/36fa4b13df38e2dde7a74bf23e49e013ca8129c6) [#76](https://github.com/npm/npm-profile/pull/76) bump npm-registry-fetch from 13.3.1 to 14.0.0
+* [`29616ad`](https://github.com/npm/npm-profile/commit/29616ad8e59847e2350d3376e755a4688d0c81a0) [#77](https://github.com/npm/npm-profile/pull/77) bump proc-log from 2.0.1 to 3.0.0
+
 ## [7.0.0](https://github.com/npm/npm-profile/compare/v6.2.1...v7.0.0) (2022-09-30)
 
 ### ⚠️ BREAKING CHANGES
