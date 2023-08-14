@@ -1,5 +1,19 @@
 # Changelog
 
+## [8.0.0](https://github.com/npm/npm-profile/compare/v7.0.1...v8.0.0) (2023-08-14)
+
+### ⚠️ BREAKING CHANGES
+
+* support for node 14 has been removed
+
+### Bug Fixes
+
+* [`cfd2d07`](https://github.com/npm/npm-profile/commit/cfd2d07ef5eeaac7187c75e31718c2d73af596da) [#93](https://github.com/npm/npm-profile/pull/93) drop node14 support (@lukekarrys)
+
+### Dependencies
+
+* [`96370c2`](https://github.com/npm/npm-profile/commit/96370c2f60a6a50a8e6027ca2b4972716af5efec) [#92](https://github.com/npm/npm-profile/pull/92) bump npm-registry-fetch from 14.0.5 to 15.0.0
+
 ## [7.0.1](https://github.com/npm/npm-profile/compare/v7.0.0...v7.0.1) (2022-10-17)
 
 ### Dependencies
