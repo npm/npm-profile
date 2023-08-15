@@ -1,5 +1,19 @@
 # Changelog
 
+## [9.0.0](https://github.com/npm/npm-profile/compare/v8.0.0...v9.0.0) (2023-08-15)
+
+### ⚠️ BREAKING CHANGES
+
+* support for node <=16.13 has been removed
+
+### Bug Fixes
+
+* [`d2fdd5e`](https://github.com/npm/npm-profile/commit/d2fdd5eeb907fab727797750e8340b213bffd60c) [#97](https://github.com/npm/npm-profile/pull/97) drop node 16.13.x support (@lukekarrys)
+
+### Dependencies
+
+* [`1855caf`](https://github.com/npm/npm-profile/commit/1855cafdc9028168fd44ac805310a782761cd89b) [#96](https://github.com/npm/npm-profile/pull/96) bump npm-registry-fetch from 15.0.0 to 16.0.0
+
 ## [8.0.0](https://github.com/npm/npm-profile/compare/v7.0.1...v8.0.0) (2023-08-14)
 
 ### ⚠️ BREAKING CHANGES
