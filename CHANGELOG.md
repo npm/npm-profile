@@ -1,5 +1,22 @@
 # Changelog
 
+## [9.0.1](https://github.com/npm/npm-profile/compare/v9.0.0...v9.0.1) (2024-04-12)
+
+### Dependencies
+
+* [`44972e2`](https://github.com/npm/npm-profile/commit/44972e20d5eb75097c8a3d7ee438b604fd8cbc98) [#126](https://github.com/npm/npm-profile/pull/126) `proc-log@4.0.0` (#126)
+
+### Chores
+
+* [`11f4605`](https://github.com/npm/npm-profile/commit/11f46058f159a0ec15c0733a61d6620db1a6b96a) [#122](https://github.com/npm/npm-profile/pull/122) postinstall for dependabot template-oss PR (@lukekarrys)
+* [`0719640`](https://github.com/npm/npm-profile/commit/0719640d5c1122aa3bd64381672a6a2280a7fe8b) [#122](https://github.com/npm/npm-profile/pull/122) bump @npmcli/template-oss from 4.21.1 to 4.21.3 (@dependabot[bot])
+* [`e944f88`](https://github.com/npm/npm-profile/commit/e944f88129d2179697f4f85d8cda164eed4445e7) [#119](https://github.com/npm/npm-profile/pull/119) postinstall for dependabot template-oss PR (@lukekarrys)
+* [`28888c7`](https://github.com/npm/npm-profile/commit/28888c7d277f65bc0b14cdd232848730eada2856) [#119](https://github.com/npm/npm-profile/pull/119) bump @npmcli/template-oss from 4.19.0 to 4.21.1 (@dependabot[bot])
+* [`30097a5`](https://github.com/npm/npm-profile/commit/30097a5eef4239399b964c2efc121e64e75ecaf5) [#101](https://github.com/npm/npm-profile/pull/101) postinstall for dependabot template-oss PR (@lukekarrys)
+* [`efe9f20`](https://github.com/npm/npm-profile/commit/efe9f20d9b456ad3f3c96a686b5c71ef7dd97f4f) [#101](https://github.com/npm/npm-profile/pull/101) bump @npmcli/template-oss from 4.18.1 to 4.19.0 (@dependabot[bot])
+* [`cd076f1`](https://github.com/npm/npm-profile/commit/cd076f19c289abc4e14c18c111163dca7ceb7047) [#100](https://github.com/npm/npm-profile/pull/100) postinstall for dependabot template-oss PR (@lukekarrys)
+* [`e928f0c`](https://github.com/npm/npm-profile/commit/e928f0c356e7207b5bd99460c361b7534ed913a4) [#100](https://github.com/npm/npm-profile/pull/100) bump @npmcli/template-oss from 4.18.0 to 4.18.1 (@dependabot[bot])
+
 ## [9.0.0](https://github.com/npm/npm-profile/compare/v8.0.0...v9.0.0) (2023-08-15)
 
 ### ⚠️ BREAKING CHANGES
