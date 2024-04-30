@@ -15,7 +15,7 @@ test('get', t => {
     t.notOk(auth, 'no authorization info sent')
     return [auth ? 200 : 401, '', {}]
   })
-  return profile.get().then(result => {
+  return profile.get().then(() => {
     return t.fail('GET w/o auth should fail')
   }, err => {
     t.equal(err.code, 'E401', 'auth errors are passed through')
@@ -114,7 +114,7 @@ test('login fallback to couch', t => {
     .post('/-/v1/login')
     .reply(404, { error: 'not found' })
   const opener = url => t.fail('called opener', { url })
-  const prompter = creds => Promise.resolve({
+  const prompter = () => Promise.resolve({
     username: 'blerp',
     password: 'prelb',
     email: 'blerp@blerp.blerp',
@@ -148,7 +148,7 @@ test('login fallback to couch when web login fails cancels opener promise', t =>
     })
   }
 
-  const prompter = creds => Promise.resolve({
+  const prompter = () => Promise.resolve({
     username: 'blerp',
     password: 'prelb',
     email: 'blerp@blerp.blerp',
@@ -182,7 +182,7 @@ test('adduser fallback to couch', t => {
     .post('/-/v1/login')
     .reply(404, { error: 'not found' })
   const opener = url => t.fail('called opener', { url })
-  const prompter = creds => Promise.resolve({
+  const prompter = () => Promise.resolve({
     username: 'blerp',
     password: 'prelb',
     email: 'blerp@blerp.blerp',
