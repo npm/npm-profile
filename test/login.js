@@ -165,7 +165,7 @@ t.test('start server', t => server.listen(PORT, t.end))
 
 t.test('login web', t => {
   let calledOpener = false
-  const opener = (url, conf) => new Promise(resolve => {
+  const opener = () => new Promise(resolve => {
     calledOpener = true
     resolve()
   })
@@ -182,7 +182,7 @@ t.test('login web', t => {
 
 t.test('adduser web', t => {
   let calledOpener = false
-  const opener = (url, conf) => new Promise(resolve => {
+  const opener = () => new Promise(resolve => {
     calledOpener = true
     resolve()
   })
@@ -201,7 +201,7 @@ t.test('adduser web', t => {
 t.test('login web by default', t => {
   let calledOpener = false
 
-  const opener = (url, conf) => new Promise(resolve => {
+  const opener = () => new Promise(resolve => {
     calledOpener = true
     resolve()
   })
@@ -222,7 +222,7 @@ t.test('login web by default', t => {
 
 t.test('adduser web', t => {
   let calledOpener = false
-  const opener = (url, conf) => new Promise(resolve => {
+  const opener = () => new Promise(resolve => {
     calledOpener = true
     resolve()
   })
@@ -240,7 +240,7 @@ t.test('adduser web', t => {
 t.test('adduser web by default', t => {
   let calledOpener = false
 
-  const opener = (url, conf) => new Promise(resolve => {
+  const opener = () => new Promise(resolve => {
     calledOpener = true
     resolve()
   })
@@ -290,12 +290,12 @@ t.test('adduser couch', t => {
 t.test('login fallback to couch', t => {
   let calledPrompter = false
 
-  const opener = (url, conf) => new Promise(resolve => {
+  const opener = () => new Promise(() => {
     throw new Error('should not call opener')
   })
 
   const prompter = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       calledPrompter = true
       resolve({
         username: 'user',
@@ -318,12 +318,12 @@ t.test('login fallback to couch', t => {
 t.test('adduser fallback to couch', t => {
   let calledPrompter = false
 
-  const opener = (url, conf) => new Promise(resolve => {
+  const opener = () => new Promise(() => {
     throw new Error('should not call opener')
   })
 
   const prompter = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       calledPrompter = true
       resolve({
         username: 'user',
@@ -391,7 +391,7 @@ t.test('501s', t => {
 
 t.test('fail at login step', t => {
   const registry = reg + '/invalid-login/'
-  const opener = (url, conf) => new Promise(resolve => resolve())
+  const opener = () => new Promise(resolve => resolve())
   const prompter = () => {
     throw new Error('should not do this')
   }
@@ -412,7 +412,7 @@ t.test('fail at login step', t => {
 
 t.test('fail at login step by having an invalid url', t => {
   const registry = reg + '/invalid-login-url/'
-  const opener = (url, conf) => new Promise(resolve => resolve())
+  const opener = () => new Promise(resolve => resolve())
   const prompter = () => {
     throw new Error('should not do this')
   }
@@ -434,7 +434,7 @@ t.test('fail at login step by having an invalid url', t => {
 
 t.test('fail at the done step', t => {
   const registry = reg + '/invalid-done/'
-  const opener = (url, conf) => new Promise(resolve => resolve())
+  const opener = () => new Promise(resolve => resolve())
   const prompter = () => {
     throw new Error('should not do this')
   }
@@ -456,7 +456,7 @@ t.test('fail at the done step', t => {
 t.test('notoken response from login endpoint (status 200, bad data)', t => {
   const registry = reg + '/notoken/'
 
-  const opener = (url, conf) => new Promise(resolve => resolve())
+  const opener = () => new Promise(resolve => resolve())
   const prompter = () => {
     throw new Error('should not do this')
   }
@@ -486,7 +486,7 @@ t.test('notoken response from login endpoint (status 200, bad data)', t => {
 t.test('retry-after 202 response', t => {
   const registry = reg + '/retry-after/'
 
-  const opener = (url, conf) => new Promise(resolve => resolve())
+  const opener = () => new Promise(resolve => resolve())
   const prompter = () => {
     throw new Error('should not do this')
   }
@@ -503,7 +503,7 @@ t.test('retry-after 202 response', t => {
 t.test('no retry-after 202 response', t => {
   const registry = reg + '/retry-again/'
 
-  const opener = (url, conf) => new Promise(resolve => resolve())
+  const opener = () => new Promise(resolve => resolve())
   const prompter = () => {
     throw new Error('should not do this')
   }
