@@ -1,5 +1,20 @@
 # Changelog
 
+## [9.0.2](https://github.com/npm/npm-profile/compare/v9.0.1...v9.0.2) (2024-04-30)
+
+### Bug Fixes
+
+* [`06687c8`](https://github.com/npm/npm-profile/commit/06687c86200ad1d12114f002d6eb53d646e96eee) [#130](https://github.com/npm/npm-profile/pull/130) linting: no-unused-vars (#130) (@wraithgar)
+
+### Dependencies
+
+* [`29e6172`](https://github.com/npm/npm-profile/commit/29e6172878c19deef8ebd6aacac63ad17a11e37d) [#129](https://github.com/npm/npm-profile/pull/129) `npm-registry-fetch@17.0.0` (#129)
+
+### Chores
+
+* [`1c8afe8`](https://github.com/npm/npm-profile/commit/1c8afe8a2652b91bca147641b4a90d7fb590919b) [#127](https://github.com/npm/npm-profile/pull/127) postinstall for dependabot template-oss PR (@lukekarrys)
+* [`3b68ec1`](https://github.com/npm/npm-profile/commit/3b68ec1791d555545ad86d5f95995a963a4110ce) [#127](https://github.com/npm/npm-profile/pull/127) bump @npmcli/template-oss from 4.21.3 to 4.21.4 (@dependabot[bot])
+
 ## [9.0.1](https://github.com/npm/npm-profile/compare/v9.0.0...v9.0.1) (2024-04-12)
 
 ### Dependencies
