@@ -138,7 +138,7 @@ test('login fallback to couch when web login fails cancels opener promise', t =>
     .reply(404, { error: 'Not found' })
 
   let cancelled = false
-  const opener = (url, { signal }) => {
+  const opener = async (url, { signal }) => {
     t.equal(url, loginUrl)
     signal.addEventListener('abort', () => {
       cancelled = true

@@ -1,6 +1,7 @@
 const t = require('tap')
 const profile = require('..')
 const http = require('http')
+const timers = require('timers/promises')
 const PORT = +process.env.PORT || 13445
 
 const reg = 'http://localhost:' + PORT
@@ -132,6 +133,17 @@ const server = http.createServer((q, s) => {
           return respond(s, 200, { token: 'blerg' })
         }
 
+      case '/retry-long-time/-/v1/login':
+        return respond(s, 200, {
+          loginUrl: 'http://www.example.com/loooooong',
+          doneUrl: reg + '/retry-long-time/-/v1/login/loooooong',
+        })
+
+      case '/retry-long-time/-/v1/login/loooooong': {
+        s.setHeader('retry-after', 60 * 1000)
+        return respond(s, 202, {})
+      }
+
       case '/invalid-login/-/v1/login':
         return respond(s, 200, { salt: 'im helping' })
 
@@ -165,7 +177,7 @@ t.test('start server', t => server.listen(PORT, t.end))
 
 t.test('login web', t => {
   let calledOpener = false
-  const opener = () => new Promise(resolve => {
+  const opener = async () => new Promise(resolve => {
     calledOpener = true
     resolve()
   })
@@ -178,6 +190,12 @@ t.test('login web', t => {
     t.equal(calledOpener, true)
     t.end()
   })
+})
+
+t.test('webAuthCheckLogin', async t => {
+  await t.resolveMatch(profile.webAuthCheckLogin(reg + '/weblogin/-/v1/login/blerg', {
+    registry: reg + '/weblogin/',
+  }), { token: 'blerg' })
 })
 
 t.test('adduser web', t => {
@@ -514,6 +532,32 @@ t.test('no retry-after 202 response', t => {
     t.resolveMatch(profile.loginWeb(opener, { registry }), expect))
   t.test('login', t =>
     t.resolveMatch(profile.login(opener, prompter, { registry }), expect))
+  t.end()
+})
+
+t.test('opener error with long 202 response', t => {
+  const registry = reg + '/retry-long-time/'
+
+  const err = new Error('opener error')
+  const throwOpener = async () => {
+    await timers.setTimeout(100)
+    throw err
+  }
+  const abortOpener = async () => {
+    await timers.setTimeout(100, null, { signal: AbortSignal.timeout(10) })
+  }
+  const prompter = () => {
+    throw new Error('should not do this')
+  }
+
+  t.test('loginWeb', async t => {
+    await t.rejects(profile.loginWeb(throwOpener, { registry }), err)
+    await t.rejects(profile.loginWeb(abortOpener, { registry }), { name: 'AbortError' })
+  })
+  t.test('login', async t => {
+    await t.rejects(profile.login(throwOpener, prompter, { registry }), err)
+    await t.rejects(profile.login(abortOpener, prompter, { registry }), { name: 'AbortError' })
+  })
   t.end()
 })
 

@@ -9,6 +9,7 @@ exports[`test/login.js TAP cleanup > got expected requests 1`] = `
 [
   "POST /weblogin/-/v1/login",
   "GET /weblogin/-/v1/login/blerg",
+  "GET /weblogin/-/v1/login/blerg",
   "POST /weblogin/-/v1/login",
   "GET /weblogin/-/v1/login/blerg",
   "POST /weblogin/-/v1/login",
@@ -52,6 +53,14 @@ exports[`test/login.js TAP cleanup > got expected requests 1`] = `
   "GET /retry-again/-/v1/login/blerg",
   "POST /retry-again/-/v1/login",
   "GET /retry-again/-/v1/login/blerg",
-  "GET /retry-again/-/v1/login/blerg"
+  "GET /retry-again/-/v1/login/blerg",
+  "POST /retry-long-time/-/v1/login",
+  "GET /retry-long-time/-/v1/login/loooooong",
+  "POST /retry-long-time/-/v1/login",
+  "GET /retry-long-time/-/v1/login/loooooong",
+  "POST /retry-long-time/-/v1/login",
+  "GET /retry-long-time/-/v1/login/loooooong",
+  "POST /retry-long-time/-/v1/login",
+  "GET /retry-long-time/-/v1/login/loooooong"
 ]
 `
