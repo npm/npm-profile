@@ -1,8 +1,5 @@
-'use strict'
-
 const test = require('tap').test
 const tnock = require('./fixtures/tnock.js')
-
 const profile = require('..')
 
 const registry = 'https://registry.npmjs.org/'
@@ -141,9 +138,9 @@ test('login fallback to couch when web login fails cancels opener promise', t =>
     .reply(404, { error: 'Not found' })
 
   let cancelled = false
-  const opener = (url, doneEmitter) => {
+  const opener = (url, { signal }) => {
     t.equal(url, loginUrl)
-    doneEmitter.on('abort', () => {
+    signal.addEventListener('abort', () => {
       cancelled = true
     })
   }
