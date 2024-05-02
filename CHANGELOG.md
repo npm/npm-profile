@@ -1,5 +1,28 @@
 # Changelog
 
+## [10.0.0](https://github.com/npm/npm-profile/compare/v9.0.2...v10.0.0) (2024-05-02)
+
+### ⚠️ BREAKING CHANGES
+
+* this uses AbortSignal.throwIfAborted() which is not available in all versions of Node 16
+* `hostname` is no longer sent as part of the web auth body
+* the opener function will now receive an object with an abort signal which can be used to listen for the abort event intead of an event emitter
+
+### Features
+
+* [`f67687d`](https://github.com/npm/npm-profile/commit/f67687d2bdc58ace8ee4e236254525cb2f3c07ef) [#131](https://github.com/npm/npm-profile/pull/131) drop node 16 support (@lukekarrys)
+* [`d6f6ebe`](https://github.com/npm/npm-profile/commit/d6f6ebe1b7e2ac75f63d261271ab442a9a96c610) [#131](https://github.com/npm/npm-profile/pull/131) remove hostname from body (@lukekarrys, @wraithgar)
+* [`c0bb22f`](https://github.com/npm/npm-profile/commit/c0bb22fa0027859b494b643fe3c670e3a366c822) [#131](https://github.com/npm/npm-profile/pull/131) add webAuthOpener method (@lukekarrys)
+* [`df44705`](https://github.com/npm/npm-profile/commit/df44705b4a7b4590531536449fcfd81de01bc36b) [#131](https://github.com/npm/npm-profile/pull/131) use AbortSignal instead of EventEmitter for opener (@lukekarrys)
+
+### Bug Fixes
+
+* [`53db633`](https://github.com/npm/npm-profile/commit/53db633662252216c23599d43cf2daac3dac1c20) [#131](https://github.com/npm/npm-profile/pull/131) pass signal to webAuthCheckLogin timer (@lukekarrys)
+
+### Dependencies
+
+* [`5c4221b`](https://github.com/npm/npm-profile/commit/5c4221b67306792ab5ec27ab4c2ce27f320f81f9) [#133](https://github.com/npm/npm-profile/pull/133) `npm-registry-fetch@17.0.1` (#133)
+
 ## [9.0.2](https://github.com/npm/npm-profile/compare/v9.0.1...v9.0.2) (2024-04-30)
 
 ### Bug Fixes
