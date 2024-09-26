@@ -1,5 +1,20 @@
 # Changelog
 
+## [11.0.0](https://github.com/npm/npm-profile/compare/v10.0.0...v11.0.0) (2024-09-26)
+### ⚠️ BREAKING CHANGES
+* `npm-profile` now supports node `^18.17.0 || >=20.5.0`
+### Bug Fixes
+* [`a0ea10b`](https://github.com/npm/npm-profile/commit/a0ea10b41698df6f8077178f008ac16c27db4620) [#152](https://github.com/npm/npm-profile/pull/152) align to npm 10 node engine range (@reggi)
+* [`4ea3f70`](https://github.com/npm/npm-profile/commit/4ea3f70330f36b3d019709fa2ac41426e605e895) [#144](https://github.com/npm/npm-profile/pull/144) exit handler error on login (#144) (@milaninfy)
+### Dependencies
+* [`66bcc40`](https://github.com/npm/npm-profile/commit/66bcc4087b938e5ea23fb5d238c1e0620591b90d) [#152](https://github.com/npm/npm-profile/pull/152) `proc-log@5.0.0`
+### Chores
+* [`8ac1fdb`](https://github.com/npm/npm-profile/commit/8ac1fdbfef7b863d0a9d38fd47970614b745a3eb) [#152](https://github.com/npm/npm-profile/pull/152) run template-oss-apply (@reggi)
+* [`1fdff2e`](https://github.com/npm/npm-profile/commit/1fdff2e67aa37a26457c60a20656eecd3408a8f6) [#146](https://github.com/npm/npm-profile/pull/146) bump @npmcli/eslint-config from 4.0.5 to 5.0.0 (@dependabot[bot])
+* [`5b3ebbc`](https://github.com/npm/npm-profile/commit/5b3ebbc6580e4389bcc85dbdfb74816810b62f4c) [#134](https://github.com/npm/npm-profile/pull/134) bump @npmcli/template-oss to 4.22.0 (@lukekarrys)
+* [`6b4558f`](https://github.com/npm/npm-profile/commit/6b4558f6d91ffc7f21f181941462146acccb218e) [#147](https://github.com/npm/npm-profile/pull/147) postinstall for dependabot template-oss PR (@hashtagchris)
+* [`c644e89`](https://github.com/npm/npm-profile/commit/c644e89bf1abfdea2a84359c9a394bb85df12d6e) [#147](https://github.com/npm/npm-profile/pull/147) bump @npmcli/template-oss from 4.23.1 to 4.23.3 (@dependabot[bot])
+
 ## [10.0.0](https://github.com/npm/npm-profile/compare/v9.0.2...v10.0.0) (2024-05-02)
 
 ### ⚠️ BREAKING CHANGES
