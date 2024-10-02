@@ -1,5 +1,9 @@
 # Changelog
 
+## [11.0.1](https://github.com/npm/npm-profile/compare/v11.0.0...v11.0.1) (2024-10-02)
+### Dependencies
+* [`7c3c631`](https://github.com/npm/npm-profile/commit/7c3c631c3268f7a305af06bbc7ad48834811d063) [#155](https://github.com/npm/npm-profile/pull/155) bump `npm-registry-fetch@18.0.0`
+
 ## [11.0.0](https://github.com/npm/npm-profile/compare/v10.0.0...v11.0.0) (2024-09-26)
 ### ⚠️ BREAKING CHANGES
 * `npm-profile` now supports node `^18.17.0 || >=20.5.0`
