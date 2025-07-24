@@ -1,5 +1,19 @@
 # Changelog
 
+## [12.0.0](https://github.com/npm/npm-profile/compare/v11.0.1...v12.0.0) (2025-07-24)
+### ⚠️ BREAKING CHANGES
+* `npm-profile` now supports node `^20.17.0 || >=22.9.0`
+### Bug Fixes
+* [`637f654`](https://github.com/npm/npm-profile/commit/637f6545c641b0be98d1996c4bc863d5a3729f7b) [#164](https://github.com/npm/npm-profile/pull/164) align to npm 11 node engine range (@owlstronaut)
+### Dependencies
+* [`7366688`](https://github.com/npm/npm-profile/commit/7366688ede67cbe133b48423289e44a5a9f8ae00) [#164](https://github.com/npm/npm-profile/pull/164) `npm-registry-fetch@19.0.0`
+### Chores
+* [`8934c09`](https://github.com/npm/npm-profile/commit/8934c09cb8d4d04b168747fe7905b9c21d9a27b1) [#164](https://github.com/npm/npm-profile/pull/164) `nock@13.5.6` (@owlstronaut)
+* [`ea70eaa`](https://github.com/npm/npm-profile/commit/ea70eaa9a5e03c7e0e755cb929bff338b8b0bde8) [#164](https://github.com/npm/npm-profile/pull/164) template-oss apply fix (@owlstronaut)
+* [`2aa199f`](https://github.com/npm/npm-profile/commit/2aa199f07c1271ffad51a0d716bc89a054c3e6f8) [#161](https://github.com/npm/npm-profile/pull/161) postinstall workflow updates (#161) (@owlstronaut)
+* [`87e427e`](https://github.com/npm/npm-profile/commit/87e427e95d32cfe52e7a7ecf35a170ce60068073) [#160](https://github.com/npm/npm-profile/pull/160) bump nock from 13.5.6 to 14.0.3 (#160) (@dependabot[bot])
+* [`49ce76a`](https://github.com/npm/npm-profile/commit/49ce76a5adaf71914b1e6d326773d2adb2aa5ad8) [#163](https://github.com/npm/npm-profile/pull/163) bump @npmcli/template-oss from 4.24.4 to 4.25.0 (#163) (@dependabot[bot], @npm-cli-bot)
+
 ## [11.0.1](https://github.com/npm/npm-profile/compare/v11.0.0...v11.0.1) (2024-10-02)
 ### Dependencies
 * [`7c3c631`](https://github.com/npm/npm-profile/commit/7c3c631c3268f7a305af06bbc7ad48834811d063) [#155](https://github.com/npm/npm-profile/pull/155) bump `npm-registry-fetch@18.0.0`
