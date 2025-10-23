@@ -1,5 +1,11 @@
 # Changelog
 
+## [12.0.1](https://github.com/npm/npm-profile/compare/v12.0.0...v12.0.1) (2025-10-23)
+### Dependencies
+* [`f147b6d`](https://github.com/npm/npm-profile/commit/f147b6d195b1cf4b56e5e459b0d6f526517a8679) [#171](https://github.com/npm/npm-profile/pull/171) bump proc-log from 5.0.0 to 6.0.0 (#171) (@dependabot[bot])
+### Chores
+* [`baa7d79`](https://github.com/npm/npm-profile/commit/baa7d7955774a5b738695d73028d3176620b534c) [#170](https://github.com/npm/npm-profile/pull/170) bump @npmcli/template-oss from 4.26.0 to 4.27.1 (#170) (@dependabot[bot], @npm-cli-bot)
+
 ## [12.0.0](https://github.com/npm/npm-profile/compare/v11.0.1...v12.0.0) (2025-07-24)
 ### ⚠️ BREAKING CHANGES
 * `npm-profile` now supports node `^20.17.0 || >=22.9.0`
