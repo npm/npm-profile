@@ -82,12 +82,21 @@ test('listTokens', t => {
     { key: 'sha512-hahaha', token: 'blah' },
     { key: 'sha512-meh', token: 'bleh' },
   ]
-  tnock(t, registry).get('/-/npm/v1/tokens').reply(200, {
+  const userTokens = [
+    { key: 'sha512-gat1', token: 'npm_gat_xyz' },
+  ]
+  const srv = tnock(t, registry)
+  srv.get('/-/npm/v1/tokens').reply(200, {
     objects: tokens,
     total: 2,
     urls: {},
   })
-  return profile.listTokens().then(tok => t.same(tok, tokens))
+  srv.get('/-/npm/v1/user/tokens').reply(200, {
+    objects: userTokens,
+    total: 1,
+    urls: {},
+  })
+  return profile.listTokens().then(tok => t.same(tok, tokens.concat(userTokens)))
 })
 
 test('loginCouch happy path', t => {
@@ -234,6 +243,9 @@ test('listTokens multipage', t => {
   const tokens3 = [
     { key: 'sha512-stahp', token: 'bluh' },
   ]
+  const userTokens = [
+    { key: 'sha512-gat1', token: 'npm_gat_xyz' },
+  ]
   const srv = tnock(t, registry)
   srv.get('/-/npm/v1/tokens').reply(200, {
     objects: tokens1,
@@ -254,10 +266,15 @@ test('listTokens multipage', t => {
     total: 1,
     urls: {},
   })
+  srv.get('/-/npm/v1/user/tokens').reply(200, {
+    objects: userTokens,
+    total: 1,
+    urls: {},
+  })
   return profile.listTokens().then(tok => {
     return t.same(
       tok,
-      tokens1.concat(tokens2).concat(tokens3),
+      tokens1.concat(tokens2).concat(tokens3).concat(userTokens),
       'supports multi-URL token requests and concats them'
     )
   })
@@ -270,22 +287,34 @@ test('removeToken', t => {
   })
 })
 
-test('createToken', t => {
-  const base = {
-    password: 'secretPassw0rd!',
-    readonly: true,
-    cidr_whitelist: ['8.8.8.8/32', '127.0.0.1', '192.168.1.1'],
-  }
-  const obj = Object.assign({
-    token: 'deadbeef',
-    key: 'sha512-badc0ffee',
-    created: (new Date()).toString(),
+test('removeToken fallback to GAT endpoint', t => {
+  const srv = tnock(t, registry)
+  srv.delete('/-/npm/v1/tokens/token/gat123').reply(404, { error: 'not found' })
+  srv.delete('/-/npm/v1/user/tokens/gat123').reply(200, { message: 'Token revoked successfully.' })
+  return profile.removeToken('gat123').then(ret => {
+    return t.equal(ret, null, 'null return value on success with fallback')
   })
-  delete obj.password
-  tnock(t, registry).post('/-/npm/v1/tokens', base).reply(200, obj)
-  return profile.createToken(
-    base.password,
-    base.readonly,
-    base.cidr_whitelist
-  ).then(ret => t.same(ret, obj, 'got the right return value'))
+})
+
+test('createToken', t => {
+  const tokenData = {
+    type: 'granular',
+    name: 'CI Publish Token',
+    access: 'read-write',
+    expires: '2025-12-01T00:00:00Z',
+    packages: ['@my-org/my-package'],
+    scopes: ['@my-org'],
+    cidr_whitelist: ['8.8.8.8/32'],
+  }
+  const response = {
+    id: '789abc',
+    token: 'npm_gat_abcdef',
+    name: 'CI Publish Token',
+    type: 'granular',
+    access: 'read-write',
+    expires: '2025-12-01T00:00:00Z',
+    created: '2025-04-15T08:20:00Z',
+  }
+  tnock(t, registry).post('/-/npm/v1/user/tokens', tokenData).reply(201, response)
+  return profile.createToken(tokenData).then(ret => t.same(ret, response, 'got the right return value'))
 })
