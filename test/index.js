@@ -289,3 +289,26 @@ test('createToken', t => {
     base.cidr_whitelist
   ).then(ret => t.same(ret, obj, 'got the right return value'))
 })
+
+test('createGatToken', t => {
+  const tokenData = {
+    type: 'granular',
+    name: 'CI Publish Token',
+    access: 'read-write',
+    expires: '2025-12-01T00:00:00Z',
+    packages: ['@my-org/my-package'],
+    scopes: ['@my-org'],
+    cidr_whitelist: ['8.8.8.8/32'],
+  }
+  const response = {
+    id: '789abc',
+    token: 'npm_gat_abcdef',
+    name: 'CI Publish Token',
+    type: 'granular',
+    access: 'read-write',
+    expires: '2025-12-01T00:00:00Z',
+    created: '2025-04-15T08:20:00Z',
+  }
+  tnock(t, registry).post('/-/npm/v1/tokens', tokenData).reply(201, response)
+  return profile.createGatToken(tokenData).then(ret => t.same(ret, response, 'got the right return value'))
+})
