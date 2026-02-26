@@ -158,60 +158,6 @@ test('login fallback to couch when web login fails cancels opener promise', t =>
   })
 })
 
-test('adduserCouch happy path', t => {
-  tnock(t, registry)
-    .put('/-/user/org.couchdb.user:blerp')
-    .reply(201, {
-      ok: true,
-    })
-  return t.resolveMatch(profile.adduserCouch('blerp', 'password'), {
-    ok: true,
-    username: 'blerp',
-  })
-})
-
-test('adduser fallback to couch', t => {
-  tnock(t, registry)
-    .put('/-/user/org.couchdb.user:blerp')
-    .reply(201, {
-      ok: true,
-    })
-    .post('/-/v1/login')
-    .reply(404, { error: 'not found' })
-  const opener = url => t.fail('called opener', { url })
-  const prompter = () => Promise.resolve({
-    username: 'blerp',
-    password: 'prelb',
-    email: 'blerp@blerp.blerp',
-  })
-  return t.resolveMatch(profile.adduser(opener, prompter), {
-    ok: true,
-    username: 'blerp',
-  })
-})
-
-test('adduserCouch happy path', t => {
-  tnock(t, registry)
-    .put('/-/user/org.couchdb.user:blerp')
-    .reply(201, {
-      ok: true,
-    })
-  return t.resolveMatch(profile.adduserCouch('blerp', 'password'), {
-    ok: true,
-    username: 'blerp',
-  })
-})
-
-test('adduserWeb fail, just testing default opts setting', t => {
-  tnock(t, registry)
-    .post('/-/v1/login')
-    .reply(404, { error: 'not found' })
-  const opener = url => t.fail('called opener', { url })
-  return t.rejects(profile.adduserWeb(opener), {
-    message: 'Web login not supported',
-  })
-})
-
 test('loginWeb fail, just testing default opts setting', t => {
   tnock(t, registry)
     .post('/-/v1/login')
