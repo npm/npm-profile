@@ -16,12 +16,9 @@ The API that this implements is documented here:
 ## Table of Contents
 
 * [API](#api)
-  * Login and Account Creation
-    * [`adduser()`](#adduser)
+  * Login
     * [`login()`](#login)
-    * [`adduserWeb()`](#adduser-web)
     * [`loginWeb()`](#login-web)
-    * [`adduserCouch()`](#adduser-couch)
     * [`loginCouch()`](#login-couch)
   * Profile Data Management
     * [`get()`](#get)
@@ -32,33 +29,6 @@ The API that this implements is documented here:
     * [`createToken()`](#create-token)
 
 ## API
-
-### <a name="adduser"></a> `> profile.adduser(opener, prompter, [opts]) → Promise`
-
-Tries to create a user new web based login, if that fails it falls back to
-using the legacy CouchDB APIs.
-
-* `opener` Function (url) → Promise, returns a promise that resolves after a browser has been opened for the user at `url`.
-* `prompter` Function (creds) → Promise, returns a promise that resolves to an object with `username`, `email` and `password` properties.
-
-#### **Promise Value**
-
-An object with the following properties:
-
-* `token` String, to be used to authenticate further API calls
-* `username` String, the username the user authenticated as
-
-#### **Promise Rejection**
-
-An error object indicating what went wrong.
-
-The `headers` property will contain the HTTP headers of the response.
-
-If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
-
-Otherwise the code will be `'E'` followed by the HTTP response code, for
-example a Forbidden response would be `E403`.
 
 ### <a name="login"></a> `> profile.login(opener, prompter, [opts]) → Promise`
 
@@ -91,37 +61,6 @@ on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
 Otherwise the code will be `'E'` followed by the HTTP response code, for
 example a Forbidden response would be `E403`.
 
-### <a name="adduser-web"></a> `> profile.adduserWeb(opener, [opts]) → Promise`
-
-Tries to create a user new web based login, if that fails it falls back to
-using the legacy CouchDB APIs.
-
-* `opener` Function (url) → Promise, returns a promise that resolves after a browser has been opened for the user at `url`.
-* [`opts`](#opts) Object
-
-#### **Promise Value**
-
-An object with the following properties:
-
-* `token` String, to be used to authenticate further API calls
-* `username` String, the username the user authenticated as
-
-#### **Promise Rejection**
-
-An error object indicating what went wrong.
-
-The `headers` property will contain the HTTP headers of the response.
-
-If the registry does not support web-login then an error will be thrown with
-its `code` property set to `ENYI` . You should retry with `adduserCouch`.
-If you use `adduser` then this fallback will be done automatically.
-
-If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
-
-Otherwise the code will be `'E'` followed by the HTTP response code, for
-example a Forbidden response would be `E403`.
-
 ### <a name="login-web"></a> `> profile.loginWeb(opener, [opts]) → Promise`
 
 Tries to login using new web based login, if that fails it falls back to
@@ -146,47 +85,6 @@ The `headers` property will contain the HTTP headers of the response.
 If the registry does not support web-login then an error will be thrown with
 its `code` property set to `ENYI` . You should retry with `loginCouch`.
 If you use `login` then this fallback will be done automatically.
-
-If the action was denied because it came from an IP address that this action
-on this account isn't allowed from then the `code` will be set to `EAUTHIP`.
-
-Otherwise the code will be `'E'` followed by the HTTP response code, for
-example a Forbidden response would be `E403`.
-
-### <a name="adduser-couch"></a> `> profile.adduserCouch(username, email, password, [opts]) → Promise`
-
-```js
-const {token} = await profile.adduser(username, email, password, {registry})
-// `token` can be passed in through `opts` for authentication.
-```
-
-Creates a new user on the server along with a fresh bearer token for future
-authentication as this user.  This is what you see as an `authToken` in an
-`.npmrc`.
-
-If the user already exists then the npm registry will return an error, but
-this is registry specific and not guaranteed.
-
-* `username` String
-* `email` String
-* `password` String
-* [`opts`](#opts) Object (optional)
-
-#### **Promise Value**
-
-An object with the following properties:
-
-* `token` String, to be used to authenticate further API calls
-* `username` String, the username the user authenticated as
-
-#### **Promise Rejection**
-
-An error object indicating what went wrong.
-
-The `headers` property will contain the HTTP headers of the response.
-
-If the action was denied because an OTP is required then `code` will be set
-to `EOTP`.
 
 If the action was denied because it came from an IP address that this action
 on this account isn't allowed from then the `code` will be set to `EAUTHIP`.

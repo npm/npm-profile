@@ -198,24 +198,6 @@ t.test('webAuthCheckLogin', async t => {
   }), { token: 'blerg' })
 })
 
-t.test('adduser web', t => {
-  let calledOpener = false
-  const opener = () => new Promise(resolve => {
-    calledOpener = true
-    resolve()
-  })
-
-  t.resolveMatch(profile.adduserWeb(opener, {
-    registry: reg + '/weblogin/',
-    opts: {},
-  }), { token: 'blerg' })
-
-  return t.test('called opener', t => {
-    t.equal(calledOpener, true)
-    t.end()
-  })
-})
-
 t.test('login web by default', t => {
   let calledOpener = false
 
@@ -229,45 +211,6 @@ t.test('login web by default', t => {
   }
 
   t.resolveMatch(profile.login(opener, prompter, {
-    registry: reg + '/weblogin/',
-  }), { token: 'blerg' })
-
-  return t.test('called opener', t => {
-    t.equal(calledOpener, true)
-    t.end()
-  })
-})
-
-t.test('adduser web', t => {
-  let calledOpener = false
-  const opener = () => new Promise(resolve => {
-    calledOpener = true
-    resolve()
-  })
-
-  t.resolveMatch(profile.adduserWeb(opener, {
-    registry: reg + '/weblogin/',
-  }), { token: 'blerg' })
-
-  return t.test('called opener', t => {
-    t.equal(calledOpener, true)
-    t.end()
-  })
-})
-
-t.test('adduser web by default', t => {
-  let calledOpener = false
-
-  const opener = () => new Promise(resolve => {
-    calledOpener = true
-    resolve()
-  })
-
-  const prompter = () => {
-    throw new Error('should not do this')
-  }
-
-  t.resolveMatch(profile.adduser(opener, prompter, {
     registry: reg + '/weblogin/',
   }), { token: 'blerg' })
 
@@ -299,12 +242,6 @@ t.test('login couch', t => {
   t.end()
 })
 
-t.test('adduser couch', t => {
-  return t.resolveMatch(profile.adduserCouch('user', 'i@izs.me', 'pass', {
-    registry: reg + '/couchdb/',
-  }), { token: 'blerg' })
-})
-
 t.test('login fallback to couch', t => {
   let calledPrompter = false
 
@@ -333,34 +270,6 @@ t.test('login fallback to couch', t => {
   })
 })
 
-t.test('adduser fallback to couch', t => {
-  let calledPrompter = false
-
-  const opener = () => new Promise(() => {
-    throw new Error('should not call opener')
-  })
-
-  const prompter = () => {
-    return new Promise((resolve) => {
-      calledPrompter = true
-      resolve({
-        username: 'user',
-        password: 'pass',
-        email: 'i@izs.me',
-      })
-    })
-  }
-
-  t.resolveMatch(profile.adduser(opener, prompter, {
-    registry: reg + '/couchdb/',
-  }), { token: 'blerg' })
-
-  return t.test('called prompter', t => {
-    t.equal(calledPrompter, true)
-    t.end()
-  })
-})
-
 t.test('501s', t => {
   const opener = () => {
     throw new Error('poop')
@@ -373,7 +282,7 @@ t.test('501s', t => {
 
   const registry = reg + '/501/'
 
-  t.plan(6)
+  t.plan(3)
 
   const expectErr = {
     code: 'E501',
@@ -386,24 +295,12 @@ t.test('501s', t => {
     profile.login(opener, prompter, { registry })
       .catch(er => t.match(er, expectErr)))
 
-  t.test('adduser', t =>
-    profile.adduser(opener, prompter, { registry })
-      .catch(er => t.match(er, expectErr)))
-
   t.test('loginWeb', t =>
     profile.loginWeb(opener, { registry })
       .catch(er => t.match(er, expectErr)))
 
-  t.test('adduserWeb', t =>
-    profile.adduserWeb(opener, { registry })
-      .catch(er => t.match(er, expectErr)))
-
   t.test('loginCouch', t =>
     profile.loginCouch('user', 'pass', { registry })
-      .catch(er => t.match(er, expectErr)))
-
-  t.test('adduserCouch', t =>
-    profile.adduserCouch('user', 'i@izs.me', 'pass', { registry })
       .catch(er => t.match(er, expectErr)))
 })
 
