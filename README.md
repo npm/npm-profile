@@ -272,8 +272,6 @@ An object that looks like this:
   cidr_whitelist: null | ["192.168.1.1/32", ...],
   fullname: String, // *
   homepage: String, // *
-  freenode: String, // *
-  twitter: String,  // *
   github: String    // *
 }
 ```
