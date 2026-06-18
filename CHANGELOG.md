@@ -1,5 +1,29 @@
 # Changelog
 
+## [13.0.0](https://github.com/npm/npm-profile/compare/v12.0.1...v13.0.0) (2026-06-18)
+### ⚠️ BREAKING CHANGES
+* `npm-profile` now supports node `^22.22.2 || ^24.15.0 || >=26.0.0`
+* template-oss-apply
+* The `npm adduser` command has been removed. Create and manage user accounts on the npm website, and use `npm login` to authenticate on the command line.
+### Features
+* [`ea455b8`](https://github.com/npm/npm-profile/commit/ea455b8c2b801564c8b948e91c8bc95438df09fb) [#189](https://github.com/npm/npm-profile/pull/189) bump to new node engine range (@owlstronaut)
+* [`39a859e`](https://github.com/npm/npm-profile/commit/39a859edabf46078eb780fecafcd51c212563e02) [#189](https://github.com/npm/npm-profile/pull/189) template-oss-apply (@owlstronaut)
+### Bug Fixes
+* [`3b5cbbc`](https://github.com/npm/npm-profile/commit/3b5cbbcb593638a6c1d089089a0ad1a03293be8f) poll web-login done-check on the configured registry origin (#191) (@manzoorwanijk)
+* [`b14baac`](https://github.com/npm/npm-profile/commit/b14baac0d67e3403132d4f833fc7fbf32b298347) [#181](https://github.com/npm/npm-profile/pull/181) remove npm adduser command (@owlstronaut)
+### Documentation
+* [`b7ee057`](https://github.com/npm/npm-profile/commit/b7ee057f5f9c0208a5ebbaa4768192dfc6f9829d) [#184](https://github.com/npm/npm-profile/pull/184) remove freenode and twitter from docs (#184) (@owlstronaut)
+### Dependencies
+* [`1a5b10f`](https://github.com/npm/npm-profile/commit/1a5b10f6d6cbe1ba39b905e8e31e289e01c875aa) [#189](https://github.com/npm/npm-profile/pull/189) `proc-log@7.0.0`
+* [`7cf7d9e`](https://github.com/npm/npm-profile/commit/7cf7d9e6d990738c5270f62a25e911ff03f7a234) [#189](https://github.com/npm/npm-profile/pull/189) `npm-registry-fetch@20.0.0`
+### Chores
+* [`4c2d50d`](https://github.com/npm/npm-profile/commit/4c2d50d7bc9fc477b9f1ce4a737af70636ae7466) template-oss-apply (@owlstronaut)
+* [`fca5307`](https://github.com/npm/npm-profile/commit/fca530723716cf9212a9cd47abd93c47a2d198e8) [#189](https://github.com/npm/npm-profile/pull/189) `@npmcli/eslint-config@7.0.0` (@owlstronaut)
+* [`bfa6688`](https://github.com/npm/npm-profile/commit/bfa66882b1e646eb299acb06755645c78c25067f) [#189](https://github.com/npm/npm-profile/pull/189) template-oss-apply (@owlstronaut)
+* [`46007f6`](https://github.com/npm/npm-profile/commit/46007f690f3310482ae091464216bf44c609566c) [#189](https://github.com/npm/npm-profile/pull/189) bumping @npmcli/template-oss from 4.30.0 to 5.1.0 (@owlstronaut)
+* [`ef7203a`](https://github.com/npm/npm-profile/commit/ef7203a141773eab42e7f5c0a1976736fbe25fbf) [#173](https://github.com/npm/npm-profile/pull/173) bump @npmcli/eslint-config from 5.1.0 to 6.0.0 (#173) (@dependabot[bot])
+* [`d1a48be`](https://github.com/npm/npm-profile/commit/d1a48be425921fdbb353fc2d6afe21e39d6ab773) [#182](https://github.com/npm/npm-profile/pull/182) bump @npmcli/template-oss from 4.29.0 to 4.30.0 (#182) (@dependabot[bot], @npm-cli-bot)
+
 ## [12.0.1](https://github.com/npm/npm-profile/compare/v12.0.0...v12.0.1) (2025-10-23)
 ### Dependencies
 * [`f147b6d`](https://github.com/npm/npm-profile/commit/f147b6d195b1cf4b56e5e459b0d6f526517a8679) [#171](https://github.com/npm/npm-profile/pull/171) bump proc-log from 5.0.0 to 6.0.0 (#171) (@dependabot[bot])
