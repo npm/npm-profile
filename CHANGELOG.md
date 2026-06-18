@@ -1,5 +1,12 @@
 # Changelog
 
+## [13.0.1](https://github.com/npm/npm-profile/compare/v13.0.0...v13.0.1) (2026-06-18)
+### Bug Fixes
+* [`3495f5f`](https://github.com/npm/npm-profile/commit/3495f5f510dd2a56545d30b247583396441a4418) [#191](https://github.com/npm/npm-profile/pull/191) poll web-login done-check on the configured registry origin (#191) (@manzoorwanijk)
+### Chores
+* [`0ccab96`](https://github.com/npm/npm-profile/commit/0ccab9682ccbce906c8e350309daafdd4d1fb504) [#194](https://github.com/npm/npm-profile/pull/194) template-oss-apply (#194) (@owlstronaut)
+* [`92a1221`](https://github.com/npm/npm-profile/commit/92a12216648ee4afc8723d03dcc3e63d5406873a) [#192](https://github.com/npm/npm-profile/pull/192) bump @npmcli/template-oss from 5.1.0 to 5.1.1 (#192) (@dependabot[bot], @npm-cli-bot)
+
 ## [13.0.0](https://github.com/npm/npm-profile/compare/v12.0.1...v13.0.0) (2026-05-22)
 ### ⚠️ BREAKING CHANGES
 * `npm-profile` now supports node `^22.22.2 || ^24.15.0 || >=26.0.0`
