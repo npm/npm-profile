@@ -1,5 +1,15 @@
 # Changelog
 
+## [12.0.2](https://github.com/npm/npm-profile/compare/v12.0.1...v12.0.2) (2026-06-18)
+### Bug Fixes
+* [`5afd320`](https://github.com/npm/npm-profile/commit/5afd320822d4a1662cd450ad8bc3cb375ca37760) poll web-login done-check on the configured registry origin (#191) (@manzoorwanijk)
+### Dependencies
+* [`620903b`](https://github.com/npm/npm-profile/commit/620903b38da8e147d486353ffd978f62ef7d47c0) [#196](https://github.com/npm/npm-profile/pull/196) `proc-log@6.1.0`
+### Chores
+* [`2580fde`](https://github.com/npm/npm-profile/commit/2580fdef60714d724c0ea4a250bbbd558329afb9) [#196](https://github.com/npm/npm-profile/pull/196) template-oss-apply (@owlstronaut)
+* [`efe56aa`](https://github.com/npm/npm-profile/commit/efe56aa8cb3c974c93f38c8eb6000ed4783fce88) [#196](https://github.com/npm/npm-profile/pull/196) `@npmcli/template-oss@5.1.1` (@owlstronaut)
+* [`6fe9450`](https://github.com/npm/npm-profile/commit/6fe94506d11419c8d916f0fc2ef7055b733bcdc7) [#196](https://github.com/npm/npm-profile/pull/196) `@npmcli/eslint-config@7.0.0` (@owlstronaut)
+
 ## [12.0.1](https://github.com/npm/npm-profile/compare/v12.0.0...v12.0.1) (2025-10-23)
 ### Dependencies
 * [`f147b6d`](https://github.com/npm/npm-profile/commit/f147b6d195b1cf4b56e5e459b0d6f526517a8679) [#171](https://github.com/npm/npm-profile/pull/171) bump proc-log from 5.0.0 to 6.0.0 (#171) (@dependabot[bot])
