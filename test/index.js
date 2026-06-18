@@ -212,6 +212,111 @@ test('adduserWeb fail, just testing default opts setting', t => {
   })
 })
 
+test('web login done-check follows the configured registry origin and port', t => {
+  // The mirror runs on a non-default port to verify host+port are both rewritten.
+  const mirror = 'https://mirror.example.com:8443/'
+  const loginUrl = 'https://www.npmjs.com/login?next=/login/cli/123'
+  // The mirror issues the session but returns a doneUrl on the canonical
+  // registry host; the poll must go back to the mirror, not registry.npmjs.org.
+  tnock(t, mirror)
+    .post('/-/v1/login')
+    .reply(200, {
+      loginUrl,
+      doneUrl: 'https://registry.npmjs.org/-/v1/done?sessionId=123',
+    })
+    .get('/-/v1/done?sessionId=123')
+    .reply(200, { token: 'success' })
+
+  const opener = async url => {
+    t.equal(url, loginUrl, 'browser still opens the canonical login url')
+  }
+
+  return t.resolveMatch(profile.loginWeb(opener, { registry: mirror }), {
+    token: 'success',
+  })
+})
+
+test('web login done-check preserves the registry path prefix', t => {
+  const proxy = 'https://corp.example.com/npm-proxy/'
+  const loginUrl = 'https://www.npmjs.com/login?next=/login/cli/456'
+  tnock(t, 'https://corp.example.com')
+    .post('/npm-proxy/-/v1/login')
+    .reply(200, {
+      loginUrl,
+      doneUrl: 'https://registry.npmjs.org/-/v1/done?sessionId=456',
+    })
+    .get('/npm-proxy/-/v1/done?sessionId=456')
+    .reply(200, { token: 'prefixed' })
+
+  const opener = async () => {}
+
+  return t.resolveMatch(profile.loginWeb(opener, { registry: proxy }), {
+    token: 'prefixed',
+  })
+})
+
+test('web login done-check does not double the registry path prefix', t => {
+  const proxy = 'https://corp.example.com/npm-proxy/'
+  const loginUrl = 'https://www.npmjs.com/login?next=/login/cli/654'
+  tnock(t, 'https://corp.example.com')
+    .post('/npm-proxy/-/v1/login')
+    .reply(200, {
+      loginUrl,
+      // doneUrl already carries the proxy path prefix, just on the canonical host.
+      doneUrl: 'https://registry.npmjs.org/npm-proxy/-/v1/done?sessionId=654',
+    })
+    .get('/npm-proxy/-/v1/done?sessionId=654')
+    .reply(200, { token: 'not-doubled' })
+
+  const opener = async () => {}
+
+  return t.resolveMatch(profile.loginWeb(opener, { registry: proxy }), {
+    token: 'not-doubled',
+  })
+})
+
+test('web login through a mirror succeeds without falling back to couch', t => {
+  const mirror = 'https://mirror.example.com/'
+  const loginUrl = 'https://www.npmjs.com/login?next=/login/cli/789'
+  tnock(t, mirror)
+    .post('/-/v1/login')
+    .reply(200, {
+      loginUrl,
+      doneUrl: 'https://registry.npmjs.org/-/v1/done?sessionId=789',
+    })
+    .get('/-/v1/done?sessionId=789')
+    .reply(200, { token: 'success' })
+
+  const opener = async () => {}
+  const prompter = () => t.fail('should not fall back to couch prompter')
+
+  return t.resolveMatch(profile.login(opener, prompter, { registry: mirror }), {
+    token: 'success',
+  })
+})
+
+test('web login leaves a non-canonical done host untouched', t => {
+  // A registry that intentionally serves the done endpoint on a separate host
+  // must be honored, not rewritten to the configured registry origin.
+  const mirror = 'https://mirror.example.com/'
+  const loginUrl = 'https://www.npmjs.com/login?next=/login/cli/abc'
+  tnock(t, mirror)
+    .post('/-/v1/login')
+    .reply(200, {
+      loginUrl,
+      doneUrl: 'https://auth.example.com/-/v1/done?sessionId=abc',
+    })
+  tnock(t, 'https://auth.example.com')
+    .get('/-/v1/done?sessionId=abc')
+    .reply(200, { token: 'custom-host' })
+
+  const opener = async () => {}
+
+  return t.resolveMatch(profile.loginWeb(opener, { registry: mirror }), {
+    token: 'custom-host',
+  })
+})
+
 test('loginWeb fail, just testing default opts setting', t => {
   tnock(t, registry)
     .post('/-/v1/login')
