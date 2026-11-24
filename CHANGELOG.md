@@ -1,5 +1,9 @@
 # Changelog
 
+## [13.0.2](https://github.com/npm/npm-profile/compare/v13.0.1...v13.0.2) (2026-11-24)
+### Bug Fixes
+* [`2f1bb01`](https://github.com/npm/npm-profile/commit/2f1bb019f894236aec31e81fdd12a7a9eefec959) [#199](https://github.com/npm/npm-profile/pull/199) bump npm-registry-fetch to ^20.0.2 (#199) (@jeffkl)
+
 ## [13.0.1](https://github.com/npm/npm-profile/compare/v13.0.0...v13.0.1) (2026-06-18)
 ### Bug Fixes
 * [`3495f5f`](https://github.com/npm/npm-profile/commit/3495f5f510dd2a56545d30b247583396441a4418) [#191](https://github.com/npm/npm-profile/pull/191) poll web-login done-check on the configured registry origin (#191) (@manzoorwanijk)
